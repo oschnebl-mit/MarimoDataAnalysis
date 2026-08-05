@@ -1,0 +1,119 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.15",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "c3f78a6154b0b845e340772aa1f022fa",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "b0e72bd4885258e5e0975c9ff56c27c3",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"gamry-dta-time-domain-viewer\">Gamry <code>.dta</code> Time-Domain Viewer</h1>\n<span class=\"paragraph\">Upload a Gamry <code>.dta</code> file (e.g. chronoamperometry). The parser is generic:\nit reads all <code>TABLE</code> blocks, skips the <code>OCVCURVE</code>, and plots the main <code>CURVE</code>.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "a471ef9d9325a2e0ee3f20b30aab162b",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "feda228d0b06bed9e3afd4ca458a9427",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "04bbf8ae5440783edd3e98e0d4f8fc3b",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "c9a5bfcaeb9a61bcd7bc4ab682d2eabc",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "e443b1ddf9adcc555ea3934ab0a9bf4c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "215e29325355b719f82aa6c01fec7bd6",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "ad846dabc9b46e3c94f97a716d5d7233",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "a0d1893aa7fc349f6a590eea70fd5f16",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "97463095e9c0202a426198e1a4fa5249",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "98dd14f34c2f1583016a4b19be3ea3d8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h3 id=\"save-high-resolution-png-300-ppi\">Save high-resolution PNG (300 ppi)</h3></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "87f514b786c3994e8aae0770beff167b",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "b273cbc7713b265bf886fc664be8b247",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "79c0a382e173d4ccde9221709583867f",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    }
+  ]
+}

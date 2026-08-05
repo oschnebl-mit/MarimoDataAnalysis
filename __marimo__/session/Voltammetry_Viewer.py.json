@@ -1,0 +1,197 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.15",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "TZnZ",
+      "code_hash": "58410e69c4e4c499c3753ebbf2b6bfc4",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "FBCV",
+      "code_hash": "84523d17f751df7d809ab9f3db147301",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"cv-lsv-overlay-viewer\">CV / LSV Overlay Viewer</h1>\n<span class=\"paragraph\">Upload one or more Gamry <code>.dta</code> files. For each file pick which curve\n(e.g. <code>CURVE</code>, <code>CURVE1</code>, <code>CURVE2</code> \u2026) to show, choose axes, and overlay\nwith a legend. Optionally normalize current by area \u2192 current density.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "mrgD",
+      "code_hash": "90cf64b8358c9860799c3cee9c7c7157",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "NKCg",
+      "code_hash": "099cb8ecdfc063e3c5a552f0475d5eed",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='NKCg-0' random-id='b80c737b-8349-1930-34ad-54eb42234fa7'><marimo-file data-initial-value='[]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eUpload one or more .dta files&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-filetypes='[&quot;.dta&quot;,&quot;.DTA&quot;,&quot;.txt&quot;]' data-multiple='true' data-kind='&quot;button&quot;' data-max_size='100000000'></marimo-file></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "qaTG",
+      "code_hash": "844595a0550d6633c6640d9bc0f4592b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Loaded 4 file(s):</strong> <code>20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_509Torr_p4_RCV3.DTA</code>, <code>20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_510Torr_LSV1.DTA</code>, <code>20260728_BmimTf2N_S3MS_PC_450cm3H2S_190K_305Torr_LSV1.DTA</code>, <code>20260728_BmimTf2N_S3MS_PC_450cm3H2S_200K_488Torr_LSV2.DTA</code></span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "JCOL",
+      "code_hash": "016ec9482bb1d64624a52e45a8a64229",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "xkkt",
+      "code_hash": "0999b7d03d64162e4da8606eb008e59c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='xkkt-0' random-id='c168825c-55f2-a93b-1f95-2495b25c332f'><marimo-dropdown data-initial-value='[&quot;Vf&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eX axis&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Ach&quot;,&quot;IERange&quot;,&quot;Im&quot;,&quot;Pt&quot;,&quot;Sig&quot;,&quot;T&quot;,&quot;Temp&quot;,&quot;Vf&quot;,&quot;Vu&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='xkkt-1' random-id='68cfae6b-56b3-ce50-c039-d4f998f62a26'><marimo-dropdown data-initial-value='[&quot;Im&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eY axis&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Ach&quot;,&quot;IERange&quot;,&quot;Im&quot;,&quot;Pt&quot;,&quot;Sig&quot;,&quot;T&quot;,&quot;Temp&quot;,&quot;Vf&quot;,&quot;Vu&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='xkkt-2' random-id='969fab4f-95b2-44e5-1332-696812992399'><marimo-switch data-initial-value='false' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eNormalize Y by area (\u2192 density)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-switch></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aZQW",
+      "code_hash": "d780fd8161f2f940180d6fe5d97986dd",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"choose-curve-cycle-per-file\">Choose curve (cycle) per file</h3></span><marimo-ui-element object-id='aZQW-0' random-id='c3767d3a-6019-ed7a-d354-cbee6732e5af'><marimo-dropdown data-initial-value='[&quot;CURVE1&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_509Torr_p4_RCV3.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;OCVCURVE&quot;,&quot;CURVE1&quot;,&quot;CURVE2&quot;,&quot;CURVE3&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='aZQW-1' random-id='fe67671d-da96-ec5f-d468-adcbf27e4b16'><marimo-dropdown data-initial-value='[&quot;CURVE&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_510Torr_LSV1.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;CURVE&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='aZQW-2' random-id='05c3661f-27fc-fa75-e73d-ed8541e8724c'><marimo-dropdown data-initial-value='[&quot;CURVE&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260728_BmimTf2N_S3MS_PC_450cm3H2S_190K_305Torr_LSV1.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;CURVE&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='aZQW-3' random-id='3f9cb837-9368-e6f1-e214-e2c1ac3b080b'><marimo-dropdown data-initial-value='[&quot;CURVE&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260728_BmimTf2N_S3MS_PC_450cm3H2S_200K_488Torr_LSV2.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;CURVE&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZIkY",
+      "code_hash": "8bde032ca7eafdb7743ebdb51ea13f26",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"legend-labels-optional\">Legend labels (optional)</h3></span><marimo-ui-element object-id='ZIkY-0' random-id='960d5e05-1be9-717c-055c-ae645cbfc3f5'><marimo-text data-initial-value='&quot;20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_509Torr_p4_RCV3.DTA&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_509Torr_p4_RCV3.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='true' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element><marimo-ui-element object-id='ZIkY-1' random-id='379ca258-e94f-79c3-55d9-07648a6a554b'><marimo-text data-initial-value='&quot;20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_510Torr_LSV1.DTA&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260723_BmimTf2N_S3MS_PC_450cm3H2S_190K_510Torr_LSV1.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='true' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element><marimo-ui-element object-id='ZIkY-2' random-id='f0712f5b-4997-264e-d091-dc95241ea727'><marimo-text data-initial-value='&quot;20260728_BmimTf2N_S3MS_PC_450cm3H2S_190K_305Torr_LSV1.DTA&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260728_BmimTf2N_S3MS_PC_450cm3H2S_190K_305Torr_LSV1.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='true' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element><marimo-ui-element object-id='ZIkY-3' random-id='6255b441-7581-29d4-1675-2ae50357ca69'><marimo-text data-initial-value='&quot;20260728_BmimTf2N_S3MS_PC_450cm3H2S_200K_488Torr_LSV2.DTA&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e20260728_BmimTf2N_S3MS_PC_450cm3H2S_200K_488Torr_LSV2.DTA&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='true' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "JRiJ",
+      "code_hash": "eb4e1f77bf58c141696f4fd2e6b50252",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RgnN",
+      "code_hash": "eaf9ac71f21774991d37964847de6495",
+      "outputs": [],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u001b[33m[W 260805 14:06:33 altair_transformer:82]\u001b(B\u001b[m Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "qDWL",
+      "code_hash": "da54fb45d87ca0f58f855667733bb3c1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h3 id=\"save-high-resolution-png-300-ppi\">Save high-resolution PNG (300 ppi)</h3></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "alIC",
+      "code_hash": "5732a6a32c2dbdaba7628570fca85fe4",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='alIC-0' random-id='55f3123a-55c9-28e2-0cf9-49816f6641a5'><marimo-text data-initial-value='&quot;overlay.png&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eFilename&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='true' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element><marimo-ui-element object-id='alIC-1' random-id='c1133216-a674-6dfc-b2c2-809f519c0170'><marimo-number data-initial-value='300' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eppi&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='72' data-stop='1200' data-step='1' data-debounce='false' data-full-width='false' data-disabled='false'></marimo-number></marimo-ui-element><marimo-ui-element object-id='alIC-2' random-id='bdc7bd1e-5b0d-27be-ac7b-5827eefb8b21'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udcbe Save PNG to disk&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "xwAq",
+      "code_hash": "9db22d0431cd6715023263d83a394da3",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Hvwt",
+      "code_hash": "b768df855657cdadaeb74c6b722bb132",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><em>Adjust the overlay, then click </em><em>\ud83d\udcbe Save PNG to disk</em><em>.</em></span></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}

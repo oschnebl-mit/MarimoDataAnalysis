@@ -1,0 +1,288 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.15",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "58410e69c4e4c499c3753ebbf2b6bfc4",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "ba79972557ad6971952d6e909b426892",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"gamry-tafel-analysis\">Gamry Tafel Analysis</h1>\n<span class=\"paragraph\">Upload a potentiodynamic-polarization <code>.dta</code>. Pick the anodic &amp; cathodic\nlinear windows with the sliders; the notebook fits each branch and reports\nTafel slopes, E_corr, i_corr, and exchange current density j\u2080.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "4bb0cb5e3240f59f2dd86e35271d2273",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "c0bb4d093100a56a6faeb15d7e15e61a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='bkHC-0' random-id='8558e9a5-142b-2895-28fd-e07764e2c49f'><marimo-file data-initial-value='[]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eUpload Gamry polarization .dta&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-filetypes='[&quot;.dta&quot;,&quot;.DTA&quot;,&quot;.txt&quot;]' data-multiple='false' data-kind='&quot;button&quot;' data-max_size='100000000'></marimo-file></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "5374ac491947383b17e0bc1d8efed266",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Technique (TAG):</strong> <code>LSV</code><br />\n<strong>Tables:</strong> CURVE<br />\n<strong>Header area:</strong> 1.0 cm\u00b2</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "ee769c031b009b72ff91f02422e46f96",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='PKri-0' random-id='13e3a8d4-e55b-d15a-8d0c-63e86f393bfd'><marimo-dropdown data-initial-value='[&quot;CURVE&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eData table&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;CURVE&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='PKri-1' random-id='1c2eba18-4030-605b-4935-0b72a3d24441'><marimo-number data-initial-value='1.0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eElectrode area (cm\u00b2)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='1e-6' data-stop='1000000.0' data-step='0.01' data-debounce='false' data-full-width='false' data-disabled='false'></marimo-number></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "7fafbecb1ee3db8d51a2fc65402040a9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='Xref-0' random-id='5883eca9-0af8-6bc8-01f3-725c634fd9a0'><marimo-dropdown data-initial-value='[&quot;Vf&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003ePotential column&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Pt&quot;,&quot;T&quot;,&quot;Vf&quot;,&quot;Im&quot;,&quot;Vu&quot;,&quot;Sig&quot;,&quot;Ach&quot;,&quot;IERange&quot;,&quot;Cycle&quot;,&quot;Temp&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='Xref-1' random-id='f80bcd23-5d37-6cf7-4ed8-d741300ff866'><marimo-dropdown data-initial-value='[&quot;Im&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eCurrent column&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Pt&quot;,&quot;T&quot;,&quot;Vf&quot;,&quot;Im&quot;,&quot;Vu&quot;,&quot;Sig&quot;,&quot;Ach&quot;,&quot;IERange&quot;,&quot;Cycle&quot;,&quot;Temp&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vZcg",
+      "code_hash": "40c1234e2d0df2c0e22028941d3bb5b9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='vZcg-0' random-id='3afcd4af-70f6-9cca-884b-4ec725b32e3b'><marimo-radio data-initial-value='&quot;None&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eiR correction source&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;None&quot;,&quot;Manual value&quot;,&quot;From EIS file&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "QrSi",
+      "code_hash": "6f44dbab72536404bbcb7b4b046d82e2",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='QrSi-0' random-id='95461695-7f55-5578-807b-e82b01e505c0'><marimo-number data-initial-value='0.0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eR\u1d64 (ohm)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='0.0' data-stop='1000000.0' data-step='0.1' data-debounce='false' data-full-width='false' data-disabled='false'></marimo-number></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SXse",
+      "code_hash": "8456444f2ada1b8fb572662bb27ab525",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>R\u1d64 = 200.000 \u03a9</strong> (manual)</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "f0820415dbdf9d4835c607fda3da7b67",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RwtR",
+      "code_hash": "9889823bcf78c753231255bad37f0b5d",
+      "outputs": [],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u001b[33m[W 260805 11:45:52 altair_transformer:82]\u001b(B\u001b[m Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "7c4d90ede57f96202c83e99123abac02",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='BYtC-0' random-id='644c8694-beea-a070-1959-241cfff6a59b'><marimo-range-slider data-initial-value='[0.006766914,0.95059751457]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eCathodic branch E-window (V)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='0.006766914' data-stop='1.9134954' data-step='0.00953364243' data-steps='[]' data-debounce='false' data-orientation='&quot;horizontal&quot;' data-show-value='true' data-full-width='true' data-disabled='false'></marimo-range-slider></marimo-ui-element><marimo-ui-element object-id='BYtC-1' random-id='cfe0aac3-c54e-3495-9c7a-7543e0f04900'><marimo-range-slider data-initial-value='[0.96966479943,1.9134954]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eAnodic branch E-window (V)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='0.006766914' data-stop='1.9134954' data-step='0.00953364243' data-steps='[]' data-debounce='false' data-orientation='&quot;horizontal&quot;' data-show-value='true' data-full-width='true' data-disabled='false'></marimo-range-slider></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "206e0e90380da1310274592f549b0cba",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "4c480d045392cae19830632159b7f9e0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"fit-results\">Fit results</h3>\n<table>\n<thead>\n<tr>\n<th>Branch</th>\n<th>Tafel slope</th>\n<th>Fit points</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Cathodic</td>\n<td>-358.2 mV/dec</td>\n<td>192 pts</td>\n</tr>\n<tr>\n<td>Anodic</td>\n<td>1888.6 mV/dec</td>\n<td>225 pts</td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\"><strong>E_corr = 0.4 mV</strong><br />\n<strong>i_corr = 2.282e-05 A/cm\u00b2</strong><br />\n(exchange current density j\u2080 \u2248 i_corr for a symmetric system)</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "9fea94bcbf749f5e7c19b7c318737ada",
+      "outputs": [],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u001b[33m[W 260805 11:46:59 altair_transformer:82]\u001b(B\u001b[m Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n\u001b[33m[W 260805 11:46:59 altair_transformer:82]\u001b(B\u001b[m Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n\u001b[33m[W 260805 11:46:59 altair_transformer:82]\u001b(B\u001b[m Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n\u001b[33m[W 260805 11:46:59 altair_transformer:82]\u001b(B\u001b[m Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "98dd14f34c2f1583016a4b19be3ea3d8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h3 id=\"save-high-resolution-png-300-ppi\">Save high-resolution PNG (300 ppi)</h3></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "915f3e751f3b7a5241495733ebade4bb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='nWHF-0' random-id='9b3b50d3-12dd-8afe-962c-ac7ed7ce252c'><marimo-text data-initial-value='&quot;tafel_plot.png&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eFilename&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='true' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element><marimo-ui-element object-id='nWHF-1' random-id='477f0526-baae-27d3-fea0-bfd7fed3eeaf'><marimo-number data-initial-value='300' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eppi&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='72' data-stop='1200' data-step='1' data-debounce='false' data-full-width='false' data-disabled='false'></marimo-number></marimo-ui-element><marimo-ui-element object-id='nWHF-2' random-id='e46188e7-e910-fba4-f0b3-a162ce663a71'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udcbe Save PNG to disk&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "e165b1fdc58211ef519e64a7eaf9a6a0",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": "c03eb3448aff4b0e1a311aeb372d1fe6",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><em>Adjust the fit, then click </em><em>Save PNG to disk</em><em>.</em></span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TFbf",
+      "code_hash": "d41bcfc7df9caa0b72e16ceb79c50f48",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='TFbf-0' random-id='a9126920-423a-b7f9-a2d4-722db4a32aac'><marimo-slider data-initial-value='9' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eSliding-window size (points)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='3' data-stop='51' data-step='2' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='true' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "WUyz",
+      "code_hash": "f879564b56caaad89046fe62b44861c8",
+      "outputs": [],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u001b[33m[W 260805 11:47:12 altair_transformer:82]\u001b(B\u001b[m Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    }
+  ]
+}

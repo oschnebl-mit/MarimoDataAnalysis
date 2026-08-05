@@ -1,0 +1,559 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.15",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "e1e795022f1361f05ebb83159e55834e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "f7df3415d62e56fb21e9c1d271741c6f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "47ee6aa95ffad58a2ca92973f9952e65",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/vnd.vegalite.v6+json": "{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v6.4.1.json\",\n  \"config\": {\n    \"view\": {\n      \"continuousHeight\": 300,\n      \"continuousWidth\": 300\n    }\n  },\n  \"data\": {\n    \"name\": \"data-6bb4c207aceb338fb8c4eeb41f38a21b\"\n  },\n  \"datasets\": {\n    \"data-6bb4c207aceb338fb8c4eeb41f38a21b\": [\n      {\n        \"Conductivity (mS/cm)\": 1.2,\n        \"Molarity\": 0.01\n      },\n      {\n        \"Conductivity (mS/cm)\": 2.3,\n        \"Molarity\": 0.02\n      },\n      {\n        \"Conductivity (mS/cm)\": 4.36,\n        \"Molarity\": 0.04\n      },\n      {\n        \"Conductivity (mS/cm)\": 6.34,\n        \"Molarity\": 0.06\n      },\n      {\n        \"Conductivity (mS/cm)\": 8.03,\n        \"Molarity\": 0.08\n      },\n      {\n        \"Conductivity (mS/cm)\": 9.82,\n        \"Molarity\": 0.1\n      }\n    ]\n  },\n  \"layer\": [\n    {\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"Molarity\",\n          \"type\": \"quantitative\"\n        },\n        \"y\": {\n          \"field\": \"Conductivity (mS/cm)\",\n          \"type\": \"quantitative\"\n        }\n      },\n      \"mark\": {\n        \"point\": true,\n        \"strokeDash\": [\n          5,\n          5\n        ],\n        \"type\": \"line\"\n      },\n      \"name\": \"view_6fabb25e1b95776d_0\"\n    },\n    {\n      \"encoding\": {\n        \"text\": {\n          \"field\": \"coef\",\n          \"type\": \"nominal\"\n        },\n        \"x\": {\n          \"value\": 20\n        },\n        \"y\": {\n          \"value\": 20\n        }\n      },\n      \"mark\": {\n        \"align\": \"left\",\n        \"type\": \"text\"\n      },\n      \"transform\": [\n        {\n          \"on\": \"Molarity\",\n          \"params\": true,\n          \"regression\": \"Conductivity (mS/cm)\"\n        }\n      ]\n    }\n  ],\n  \"params\": [\n    {\n      \"bind\": \"scales\",\n      \"name\": \"param_1e9efca18e7a2868\",\n      \"select\": {\n        \"encodings\": [\n          \"x\",\n          \"y\"\n        ],\n        \"type\": \"interval\"\n      },\n      \"views\": [\n        \"view_6fabb25e1b95776d_0\"\n      ]\n    }\n  ],\n  \"usermeta\": {\n    \"embedOptions\": {}\n  }\n}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "62cfc95c53076f371f1dc5336fcecaae",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "5effcd7f0067740ab943545762cb475f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "ee8f7471a32809722134636f25feae42",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "b03db66e5ab9b65cdc30febc70728af5",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "2fc20156790ac5ee3647bb2d60ba723a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "4dc65cec5de241b046de3a176980718d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "8e3f1bbb73f0f6c952fcf873332eae9f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='BYtC-0' random-id='feae0a88-4fe0-9886-9124-2210bbf43ddf'><marimo-file-browser data-initial-value='[]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eSelect Gamry .dta files for calibration...&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-initial-path='&quot;/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/Jaramillo lab/CryoEchem/Gamry Data&quot;' data-selection-mode='&quot;file&quot;' data-filetypes='[]' data-multiple='true' data-restrict-navigation='false'></marimo-file-browser></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "c7e4dfd550b6b8be93eb78208a5953e7",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "'Zphz'",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_Kclp_.py:2: UserWarning: Automatically deduplicated selection parameter with identical configuration. If you want independent parameters, explicitly name them differently (e.g., name='param1', name='param2'). See https://github.com/vega/altair/issues/3891\n  bplot = plot_dual_bode(caldata,groupby='Measurement')\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_Kclp_.py&quot;</span>, line <span class=\"m\">3</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">caldf</span> <span class=\"o\">=</span> <span class=\"n\">parse_multi_EIS_alt</span><span class=\"p\">(</span><span class=\"n\">caldata</span><span class=\"p\">,</span><span class=\"n\">liqvolstring</span><span class=\"o\">=</span><span class=\"sa\">r</span><span class=\"s1\">&#39;(\\d+)uL&#39;</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_Xref_.py&quot;</span>, line <span class=\"m\">254</span>, in <span class=\"n\">parse_multi_EIS_alt</span>\n<span class=\"w\">    </span><span class=\"n\">subdf</span> <span class=\"o\">=</span> <span class=\"n\">newdf</span><span class=\"p\">[</span><span class=\"n\">newdf</span><span class=\"p\">[</span><span class=\"s1\">&#39;Zphz&#39;</span><span class=\"p\">]</span><span class=\"o\">.</span><span class=\"n\">abs</span><span class=\"p\">()</span><span class=\"o\">&lt;</span><span class=\"mi\">10</span><span class=\"p\">]</span><span class=\"o\">.</span><span class=\"n\">groupby</span><span class=\"p\">(</span><span class=\"s1\">&#39;Measurement&#39;</span><span class=\"p\">)[</span><span class=\"s1\">&#39;Zmod&#39;</span><span class=\"p\">]</span><span class=\"o\">.</span><span class=\"n\">mean</span><span class=\"p\">()</span><span class=\"o\">.</span><span class=\"n\">reset_index</span><span class=\"p\">(</span><span class=\"n\">name</span><span class=\"o\">=</span><span class=\"s1\">&#39;Rsoln&#39;</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/Users/ods/Documents/Python/MarimoDataAnalysis/.venv/lib/python3.10/site-packages/pandas/core/frame.py&quot;</span>, line <span class=\"m\">4113</span>, in <span class=\"n\">__getitem__</span>\n<span class=\"w\">    </span><span class=\"n\">indexer</span> <span class=\"o\">=</span> <span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">columns</span><span class=\"o\">.</span><span class=\"n\">get_loc</span><span class=\"p\">(</span><span class=\"n\">key</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/Users/ods/Documents/Python/MarimoDataAnalysis/.venv/lib/python3.10/site-packages/pandas/core/indexes/range.py&quot;</span>, line <span class=\"m\">417</span>, in <span class=\"n\">get_loc</span>\n<span class=\"w\">    </span><span class=\"k\">raise</span> <span class=\"ne\">KeyError</span><span class=\"p\">(</span><span class=\"n\">key</span><span class=\"p\">)</span>\n<span class=\"gr\">KeyError</span>: <span class=\"n\">&#39;Zphz&#39;</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "emfo",
+      "code_hash": "9f93cd56aacece4a0ca920ab779d53bf",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "syntax",
+          "evalue": "line 11\n    bplot.properties(title=f'Calibration for 10 mM NaCl in H2O. Cell Constants:{caldf['Cell Constant'].values}')\n                                                                                       ^^^^\nSyntaxError: f-string: unmatched '['\n",
+          "traceback": []
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "b930dbbf6dc759b9d3202da144a3158e",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "08fef97dfebab741d43cf8a94638ac9f",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "3a476a9c07d7d479662a49bb7be652dc",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": "90fa293059a2fb02a7bb14457eba62cb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ROlb",
+      "code_hash": "e509d365cf2e3c8ecb9a1ade7e3ff458",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='ZHCJ-0' random-id='0bf0601d-1858-31da-773b-f245e8f511bd'><marimo-file-browser data-initial-value='[]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eSelect Gamry .dta files...&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-initial-path='&quot;/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/Jaramillo lab/CryoEchem/Gamry Data&quot;' data-selection-mode='&quot;file&quot;' data-filetypes='[]' data-multiple='true' data-restrict-navigation='false'></marimo-file-browser></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "qnkX",
+      "code_hash": "63dc34733c675c881ce98421fb6081c0",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "ZCURVE marker not found",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_qnkX_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">h2sdf</span> <span class=\"o\">=</span> <span class=\"n\">file_browser_to_dataframe</span><span class=\"p\">(</span><span class=\"n\">browser1</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_SFPL_.py&quot;</span>, line <span class=\"m\">10</span>, in <span class=\"n\">file_browser_to_dataframe</span>\n<span class=\"w\">    </span><span class=\"n\">processed_data</span> <span class=\"o\">=</span> <span class=\"n\">read_gamry_dta_alt</span><span class=\"p\">(</span><span class=\"n\">file_info</span><span class=\"o\">.</span><span class=\"n\">path</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_PKri_.py&quot;</span>, line <span class=\"m\">124</span>, in <span class=\"n\">read_gamry_dta_alt</span>\n<span class=\"w\">    </span><span class=\"k\">raise</span> <span class=\"ne\">ValueError</span><span class=\"p\">(</span><span class=\"s2\">&quot;ZCURVE marker not found&quot;</span><span class=\"p\">)</span>\n<span class=\"gr\">ValueError</span>: <span class=\"n\">ZCURVE marker not found</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "TqIu",
+      "code_hash": "e5da3f560eb4aa376f1201c4ef5c4b1b",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (ValueError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Vxnm",
+      "code_hash": "a802a16d406e9375a28150168765daa2",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (ValueError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "DnEU",
+      "code_hash": "0383d15df0b6047b6c8417ce0ec0d3df",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (ValueError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ulZA",
+      "code_hash": "b2f9d933d013296cbfac7a4f8d4ad474",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "Initial path C:\\Users\\oschn\\Dropbox (MIT)\\jaramillogroupshared\\Data\\Jaramillo lab\\CryoEchem\\Gamry Data is not a directory.",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_ulZA_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">browser2</span> <span class=\"o\">=</span> <span class=\"n\">mo</span><span class=\"o\">.</span><span class=\"n\">ui</span><span class=\"o\">.</span><span class=\"n\">file_browser</span><span class=\"p\">(</span><span class=\"n\">initial_path</span><span class=\"o\">=</span><span class=\"sa\">r</span><span class=\"s1\">&#39;C:\\Users\\oschn\\Dropbox (MIT)\\jaramillogroupshared\\Data\\Jaramillo lab\\CryoEchem\\Gamry Data&#39;</span><span class=\"p\">,</span><span class=\"n\">multiple</span><span class=\"o\">=</span><span class=\"kc\">True</span><span class=\"p\">,</span><span class=\"n\">selection_mode</span><span class=\"o\">=</span><span class=\"s1\">&#39;file&#39;</span><span class=\"p\">,</span><span class=\"n\">label</span><span class=\"o\">=</span><span class=\"s1\">&#39;Select files...&#39;</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/Users/ods/Documents/Python/MarimoDataAnalysis/.venv/lib/python3.10/site-packages/marimo/_plugins/ui/_impl/file_browser.py&quot;</span>, line <span class=\"m\">242</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"k\">raise</span> <span class=\"ne\">ValueError</span><span class=\"p\">(</span>\n<span class=\"gr\">ValueError</span>: <span class=\"n\">Initial path C:\\Users\\oschn\\Dropbox (MIT)\\jaramillogroupshared\\Data\\Jaramillo lab\\CryoEchem\\Gamry Data is not a directory.</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "ecfG",
+      "code_hash": "4aa717924ff14c5d3ee71864c8b532a1",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (ValueError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Pvdt",
+      "code_hash": "ba83e65bf9fe5785f6cdbfc8cd23f33e",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (ValueError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZBYS",
+      "code_hash": "2922947bd94b68fb1336dd957dc4ee57",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (ValueError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aLJB",
+      "code_hash": "887127a8ef2ce05a1f8be18105deeb01",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "name 'syndf' is not defined",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_aLJB_.py&quot;</span>, line <span class=\"m\">20</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">sns</span><span class=\"o\">.</span><span class=\"n\">boxplot</span><span class=\"p\">(</span><span class=\"n\">data</span><span class=\"o\">=</span><span class=\"n\">syndf</span><span class=\"p\">,</span> <span class=\"n\">x</span><span class=\"o\">=</span><span class=\"s2\">&quot;Date&quot;</span><span class=\"p\">,</span> <span class=\"n\">y</span><span class=\"o\">=</span><span class=\"s2\">&quot;Gsoln&quot;</span><span class=\"p\">,</span> <span class=\"n\">ax</span><span class=\"o\">=</span><span class=\"n\">axes</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">],</span> <span class=\"o\">**</span><span class=\"n\">box_kws</span><span class=\"p\">)</span>\n<span class=\"gr\">NameError</span>: <span class=\"n\">name &#39;syndf&#39; is not defined</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "nHfw",
+      "code_hash": "8bf05ac0f3d5ca5166cdf7eae213d20f",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "Initial path C:\\Users\\oschn\\Dropbox (MIT)\\jaramillogroupshared\\Data\\Jaramillo lab\\CryoEchem is not a directory.",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_nHfw_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">browser3</span> <span class=\"o\">=</span> <span class=\"n\">mo</span><span class=\"o\">.</span><span class=\"n\">ui</span><span class=\"o\">.</span><span class=\"n\">file_browser</span><span class=\"p\">(</span><span class=\"n\">initial_path</span><span class=\"o\">=</span><span class=\"sa\">r</span><span class=\"s1\">&#39;C:\\Users\\oschn\\Dropbox (MIT)\\jaramillogroupshared\\Data\\Jaramillo lab\\CryoEchem&#39;</span><span class=\"p\">,</span><span class=\"n\">multiple</span><span class=\"o\">=</span><span class=\"kc\">True</span><span class=\"p\">,</span><span class=\"n\">selection_mode</span><span class=\"o\">=</span><span class=\"s1\">&#39;file&#39;</span><span class=\"p\">,</span><span class=\"n\">label</span><span class=\"o\">=</span><span class=\"s1\">&#39;Going back for h2s only data&#39;</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/Users/ods/Documents/Python/MarimoDataAnalysis/.venv/lib/python3.10/site-packages/marimo/_plugins/ui/_impl/file_browser.py&quot;</span>, line <span class=\"m\">242</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"k\">raise</span> <span class=\"ne\">ValueError</span><span class=\"p\">(</span>\n<span class=\"gr\">ValueError</span>: <span class=\"n\">Initial path C:\\Users\\oschn\\Dropbox (MIT)\\jaramillogroupshared\\Data\\Jaramillo lab\\CryoEchem is not a directory.</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "xXTn",
+      "code_hash": "3590d03c5145a0dbe60b7acab723c652",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (ValueError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "AjVT",
+      "code_hash": "e4bbc9db4f2dfd09902d2ab75e417d3f",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "Name `dfnew` is not defined. It was expected to be defined in ",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_AjVT_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">newh2sdata</span> <span class=\"o\">=</span> <span class=\"n\">parse_multi_EIS_alt</span><span class=\"p\">(</span><span class=\"n\">dfnew</span><span class=\"p\">)</span>\n<span class=\"gr\">NameError</span>: <span class=\"n\">name &#39;dfnew&#39; is not defined</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "pHFh",
+      "code_hash": "24d7b1409aa5173f208f47748d909274",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "Name `dfnew` is not defined. It was expected to be defined in ",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_pHFh_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">pyrdf</span> <span class=\"o\">=</span> <span class=\"n\">parse_multi_EIS_alt</span><span class=\"p\">(</span><span class=\"n\">dfnew</span><span class=\"p\">)</span>\n<span class=\"gr\">NameError</span>: <span class=\"n\">name &#39;dfnew&#39; is not defined</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "NCOB",
+      "code_hash": "1a3be5480e6044af73acef424b5daca0",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (MarimoExceptionRaisedError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aqbW",
+      "code_hash": "6aba686557ac914bdaffdebfd6796443",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (MarimoExceptionRaisedError): ",
+          "traceback": null
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TRpd",
+      "code_hash": "cf397f33c2a31a3c80b31c5f9392b39d",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "name 'h2sdatatrimmed' is not defined",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_TRpd_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">h2sdatatrimmed</span><span class=\"p\">[</span><span class=\"s1\">&#39;invT&#39;</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"mi\">1000</span><span class=\"o\">/</span><span class=\"n\">h2sdatatrimmed</span><span class=\"p\">[</span><span class=\"s1\">&#39;Temperature&#39;</span><span class=\"p\">]</span>\n<span class=\"gr\">NameError</span>: <span class=\"n\">name &#39;h2sdatatrimmed&#39; is not defined</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "TXez",
+      "code_hash": "dfe1b2d22fd7cf96af40db0be58ea090",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "name 'h2sdatatrimmed' is not defined",
+          "traceback": null
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/var/folders/x9/r_wbc6gs1zj97mpnl33t8rsm0000gn/T/marimo_7188/__marimo__cell_TXez_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">m</span> <span class=\"o\">=</span> <span class=\"n\">getslope</span><span class=\"p\">(</span><span class=\"n\">h2sdatatrimmed</span><span class=\"p\">)</span>\n<span class=\"gr\">NameError</span>: <span class=\"n\">name &#39;h2sdatatrimmed&#39; is not defined</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "dNNg",
+      "code_hash": "5366188644eef5556d41bb6de9fa9569",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "yCnT",
+      "code_hash": null,
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "wlCL",
+      "code_hash": "46a85644bc410766af664eb9c4119f2b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
