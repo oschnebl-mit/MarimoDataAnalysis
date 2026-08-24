@@ -27,7 +27,6 @@ def _(os):
 
     # basepath = r'C:\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data\Jaramillo lab\CryoEchem'
     basepath = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/Jaramillo lab/CryoEchem/Gamry Data'
-
     return (basepath,)
 
 
@@ -298,6 +297,7 @@ def _(alt, np, pd, plt, re):
                 title='|Z| (Ohm)'
                 # axis=alt.Axis(titleColor=color_mag, labelColor=color_mag)
             ),
+            detail = 'Measurement:N',
             color= groupby if groupby is not None else alt.value("#0f4c75")
         )
 
@@ -309,6 +309,7 @@ def _(alt, np, pd, plt, re):
                 title='Phase Angle (°)'
                 # axis=alt.Axis(titleColor=color_phase, labelColor=color_phase)
             ),
+            detail = 'Measurement:N',
             color=groupby if groupby is not None else alt.value("#ee8430")
         )
 
@@ -709,17 +710,19 @@ def _(browser1, file_browser_to_dataframe):
     _minphase = h2sdf.groupby('Measurement',as_index=False)["Zphz"].max()
     _good_measurements = _minphase[abs(_minphase['Zphz'])<20]
     h2ssubdf = h2sdf[h2sdf["Measurement"].isin(_good_measurements['Measurement'])]
-    return h2sdf, h2ssubdf
+    return (h2ssubdf,)
 
 
 @app.cell
-def _(h2sdf, h2ssubdf, plot_dual_bode):
+def _(h2ssubdf, plot_dual_bode):
     # bodeplot, h2sdata = parse_multi_EIS_alt(newdf,showbode=True)
     # h2sdata['Total Volume'] = h2sdata['Gas Volume']/620
     # h2sdata['Kappa'] = resistance_to_kappa(h2sdata['Rsoln'],h2sdata['Total Volume'])
-    h2sdf['Date'] = h2sdf['Measurement'].str.extract(r"(202\d+)_")
+    h2ssubdf['Date'] = h2ssubdf['Measurement'].str.extract(r"(202\d+)_")
+    h2ssubdf['Temp'] = h2ssubdf['Measurement'].str.extract(r"(\d\d\dK)")
+    h2ssubdf['Date_Temp'] = h2ssubdf['Date']+ "_" + h2ssubdf['Temp']
     # minidf = h2sdf[h2sdf['Date']=='20251120']
-    plot_dual_bode(h2ssubdf,groupby='Measurement')
+    plot_dual_bode(h2ssubdf,groupby='Date')
     return
 
 
