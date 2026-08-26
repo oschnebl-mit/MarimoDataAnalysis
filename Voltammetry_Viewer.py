@@ -27,6 +27,116 @@ def _(mo):
 
 
 @app.cell
+def _(Path, csv, pd):
+    def parse_dta_file(filepath, columns=("T", "Vf", "Im"), metadata_keys=("SCANRATE",)):
+        """
+        Parse a single Gamry .DTA file.
+
+        Returns a DataFrame containing the union of rows from every TABLE block
+        that includes all of `columns`, with each requested metadata key added
+        as a constant-value column, plus a 'Curve' column noting which TABLE
+        block the row came from and a 'SourceFile' column.
+        """
+        filepath = Path(filepath)
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.read().splitlines()
+ 
+        reader_rows = list(csv.reader(lines, delimiter="\t"))
+ 
+        metadata = {}
+        tables = []  # list of (table_name, DataFrame)
+ 
+        i = 0
+        n = len(reader_rows)
+        while i < n:
+            row = reader_rows[i]
+            if not row or row[0] == "":
+                i += 1
+                continue
+ 
+            key = row[0]
+            rtype = row[1] if len(row) > 1 else ""
+ 
+            if rtype == "TABLE":
+                table_name = key
+                try:
+                    nrows = int(row[2])
+                except (IndexError, ValueError):
+                    nrows = None
+ 
+                # Next row: column names (row[0] is blank, row[1] is usually 'Pt')
+                i += 1
+                if i >= n:
+                    break
+                header_names = reader_rows[i][1:]
+ 
+                # Row after that: units (skip, but consume it)
+                i += 1
+                units_row = reader_rows[i][1:] if i < n else []
+ 
+                # Data rows follow until we've consumed nrows, or hit a blank/non-numeric first cell
+                data_rows = []
+                i += 1
+                while i < n:
+                    r = reader_rows[i]
+                    if not r or r[0] == "":
+                        break
+                    # Data rows start with an integer point index
+                    try:
+                        int(r[0])
+                    except ValueError:
+                        break
+                    data_rows.append(r[1:len(header_names) + 1])
+                    i += 1
+                    if nrows is not None and len(data_rows) >= nrows:
+                        break
+ 
+                # Pad/truncate rows to header length, build DataFrame
+                width = len(header_names)
+                cleaned = [
+                    (r + [""] * (width - len(r)))[:width] if len(r) < width else r[:width]
+                    for r in data_rows
+                ]
+                df = pd.DataFrame(cleaned, columns=header_names)
+                for c in df.columns:
+                    df[c] = df[c].map(_try_float)
+ 
+                if all(col in df.columns for col in columns):
+                    df.insert(0, "Curve", table_name)
+                    tables.append((table_name, df))
+ 
+                continue  # i already advanced past this table
+ 
+            else:
+                # Ordinary metadata line: KEY  TYPE  VALUE  [extra...]  Description
+                if key in metadata_keys and len(row) > 2:
+                    metadata[key] = _try_float(row[2])
+                i += 1
+ 
+        if not tables:
+            raise ValueError(
+                f"No TABLE block containing columns {columns} found in {filepath}"
+            )
+ 
+        combined = pd.concat([t[1] for t in tables], ignore_index=True)
+ 
+        # Attach metadata as constant columns
+        for mkey in metadata_keys:
+            combined[mkey] = metadata.get(mkey)
+ 
+        combined["SourceFile"] = filepath.name
+ 
+        # Reorder: Curve, T, Vf, Im, <other metadata>, SourceFile, then anything else
+        ordered_cols = ["Curve"] + list(columns) + list(metadata_keys) + ["SourceFile"]
+        remaining = [c for c in combined.columns if c not in ordered_cols]
+        combined = combined[ordered_cols + remaining]
+ 
+        return combined
+
+    return
+
+
+@app.cell
 def _(pd):
     def _to_numeric(series):
         conv = pd.to_numeric(series, errors="coerce")
@@ -109,6 +219,12 @@ def _(files, mo, parse_gamry_dta):
 
 
 @app.cell
+def _():
+    # parsed["20260824_BmPTf2N_S3MS_200K_550Torr_p4V_RCV3.DTA"]["header"]["SCANRATE"][1]
+    return
+
+
+@app.cell
 def _(parsed):
     # Determine common numeric columns across all files (for axis dropdowns)
     def _numeric_cols(tabs):
@@ -124,6 +240,12 @@ def _(parsed):
         common = nc if common is None else (common & nc)
     common = sorted(common or [])
     return (common,)
+
+
+@app.cell
+def _(common):
+    common
+    return
 
 
 @app.cell
@@ -202,10 +324,12 @@ def _(
         _sub["series"] = label_inputs[_name].value or _name
         _sub["curve"] = _curve
         _sub["order"] = range(len(_sub))   # preserve sweep order for line drawing
+        _sub["scanrate"] = float(_info['header']['SCANRATE'][1])
+        _sub["date"] = _sub["series"].str.extract(r"(20260\d*)_")
         frames.append(_sub)
 
     plotdf = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(
-        columns=["x", "y", "series", "curve", "order"])
+        columns=["x", "y", "series", "curve", "order", "scanrate", "date"])
     return (plotdf,)
 
 
@@ -219,11 +343,14 @@ def _(alt, mo, normalize, plotdf, x_axis, y_axis):
     chart = alt.Chart(plotdf).mark_line().encode(
         x=alt.X("x:Q", title=x_axis.value, scale=alt.Scale(zero=False, nice=False)),
         y=alt.Y("y:Q", title=_ylab, scale=alt.Scale(zero=False)),
-        color=alt.Color("series:N", title="Series",
+        color=alt.Color("scanrate:Q", title="scanrate",
                         legend=alt.Legend(orient="right")),
+        detail = "series:N",
+        size = "date:N",
         order=alt.Order("order:Q"),          # draw in sweep order (CV loops close)
         tooltip=["series:N", "curve:N", "x:Q", "y:Q"],
     ).add_params(_zoom).properties(width=680, height=440)
+
 
     plot = mo.ui.altair_chart(chart, chart_selection=False,
                               legend_selection=True)
