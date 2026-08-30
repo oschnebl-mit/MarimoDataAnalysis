@@ -243,12 +243,6 @@ def _(parsed):
 
 
 @app.cell
-def _(common):
-    common
-    return
-
-
-@app.cell
 def _(common, mo):
     def _pick(prefs, idx):
         for p in prefs:
