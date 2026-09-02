@@ -25,8 +25,8 @@ def _(os):
     if os.path.exists(cache_dir):
         shutil.rmtree(cache_dir)
 
-    # basepath = r'C:\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data\Jaramillo lab\CryoEchem'
-    basepath = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/Jaramillo lab/CryoEchem/Gamry Data'
+    basepath = r'C:\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data\Jaramillo lab\CryoEchem'
+    # basepath = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/Jaramillo lab/CryoEchem/Gamry Data'
     return (basepath,)
 
 
@@ -723,6 +723,7 @@ def _(h2ssubdf, plot_dual_bode):
     h2ssubdf['Date_Temp'] = h2ssubdf['Date']+ "_" + h2ssubdf['Temp']
     # minidf = h2sdf[h2sdf['Date']=='20251120']
     plot_dual_bode(h2ssubdf,groupby='Date')
+
     return
 
 

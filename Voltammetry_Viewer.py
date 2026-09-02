@@ -255,8 +255,9 @@ def _(common, mo):
     y_axis = mo.ui.dropdown(options=common, value=_pick(["Im"], 1),
                             label="Y axis")
     normalize = mo.ui.switch(value=False, label="Normalize Y by area (→ density)")
-    mo.hstack([x_axis, y_axis, normalize])
-    return normalize, x_axis, y_axis
+    iRcorrect = mo.ui.switch(value=False, label="Apply iR correction")
+    mo.hstack([x_axis, y_axis, normalize, iRcorrect])
+    return iRcorrect, normalize, x_axis, y_axis
 
 
 @app.cell
@@ -276,21 +277,32 @@ def _(mo, parsed):
 
 
 @app.cell
-def _(mo, parsed):
+def _():
     # Optional custom legend label per file (defaults to filename)
-    label_inputs = {}
+    # label_inputs = {}
+    # for _name in parsed:
+    #     label_inputs[_name] = mo.ui.text(value=_name, label=_name,
+    #                                      full_width=True)
+    # mo.vstack([mo.md("### Legend labels (optional)")]
+    #           + list(label_inputs.values()))
+    return
+
+
+@app.cell
+def _(mo, parsed):
+    Ru_inputs = {}
     for _name in parsed:
-        label_inputs[_name] = mo.ui.text(value=_name, label=_name,
-                                         full_width=True)
-    mo.vstack([mo.md("### Legend labels (optional)")]
-              + list(label_inputs.values()))
-    return (label_inputs,)
+        Ru_inputs[_name] = mo.ui.number(value = 0,label=_name,full_width=True)
+
+    mo.vstack([mo.md("## Add Ru value for iR compensation")]+list(Ru_inputs.values()))
+    return (Ru_inputs,)
 
 
 @app.cell
 def _(
+    Ru_inputs,
     curve_selectors,
-    label_inputs,
+    iRcorrect,
     mo,
     normalize,
     parsed,
@@ -315,7 +327,10 @@ def _(
         })
         if normalize.value:
             _sub["y"] = _sub["y"] / _info["area"]
-        _sub["series"] = label_inputs[_name].value or _name
+        if iRcorrect.value:
+            _sub["x"] = _sub["x"] - _sub["y"]*Ru_inputs[_name].value
+        # _sub["series"] = label_inputs[_name].value or _name
+        _sub["series"] = _name
         _sub["curve"] = _curve
         _sub["order"] = range(len(_sub))   # preserve sweep order for line drawing
         _sub["scanrate"] = float(_info['header']['SCANRATE'][1])
@@ -334,13 +349,13 @@ def _(alt, mo, normalize, plotdf, x_axis, y_axis):
     _ylab = (f"{y_axis.value} / area" if normalize.value else y_axis.value)
     _zoom = alt.selection_interval(bind="scales")
 
-    chart = alt.Chart(plotdf).mark_line().encode(
+    chart = alt.Chart(plotdf).mark_circle(fillOpacity=0.1,strokeOpacity=0.1).encode(
         x=alt.X("x:Q", title=x_axis.value, scale=alt.Scale(zero=False, nice=False)),
         y=alt.Y("y:Q", title=_ylab, scale=alt.Scale(zero=False)),
-        color=alt.Color("scanrate:Q", title="scanrate",
+        color=alt.Color("date:N", title="Expt Date",
                         legend=alt.Legend(orient="right")),
         detail = "series:N",
-        size = "date:N",
+        size = "scanrate:Q",
         order=alt.Order("order:Q"),          # draw in sweep order (CV loops close)
         tooltip=["series:N", "curve:N", "x:Q", "y:Q"],
     ).add_params(_zoom).properties(width=680, height=440)
@@ -348,7 +363,7 @@ def _(alt, mo, normalize, plotdf, x_axis, y_axis):
 
     plot = mo.ui.altair_chart(chart, chart_selection=False,
                               legend_selection=True)
-    plot
+    plot.interactive()
     return (chart,)
 
 
