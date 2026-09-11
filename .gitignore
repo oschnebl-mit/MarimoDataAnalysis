@@ -1,6 +1,4 @@
 .venv/
 __marimo__/
-__marimo__/session/
-*.json
 .DS_Store
 *.png
