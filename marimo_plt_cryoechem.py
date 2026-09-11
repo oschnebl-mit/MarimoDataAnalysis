@@ -25,7 +25,6 @@ def _(mo):
 @app.cell
 def _(mo):
     browser = mo.ui.file_browser(filetypes=['.csv'],multiple=False)
-    browser
     return (browser,)
 
 
@@ -55,7 +54,6 @@ def _(mo):
 @app.cell
 def _(mo):
     tgms_browser = mo.ui.file_browser(label='Select TGMS files, if applicable',multiple=False)
-    tgms_browser
     return (tgms_browser,)
 
 
@@ -125,7 +123,7 @@ def _(np):
     psat_co = Antoine(A_co, B_co, C_co, templist)
     psat_o2 = Antoine(A_o2,B_o2,C_o2,templist)
     psat_h2s = Antoine(A_h2s, B_h2s, C_h2s, templist)
-    return psat_h2s, psat_o2, templist
+    return psat_h2s, templist
 
 
 @app.cell
@@ -134,6 +132,8 @@ def _(df, dt, pd, plt, tgms_df, tgms_time, time, xrange):
         fig,(ax1,ax2,ax4,ax5) = plt.subplots(4,1,sharex=True)
     else:
         fig,(ax1,ax2,ax4) = plt.subplots(3,1,sharex=True)
+
+    plt.xticks(rotation=45)
 
     F1 = df['H2S sccm']
     F2 = df['Ar sccm']
@@ -148,9 +148,9 @@ def _(df, dt, pd, plt, tgms_df, tgms_time, time, xrange):
 
     rxnP = ax2.plot(time, P1, color='tab:orange', label='Rxn')
     ax3 = ax2.twinx()
-    vacP = ax3.plot(time, P2, color='tab:orange', linestyle='dashed', label='Cryo')
+    # vacP = ax3.plot(time, P2, color='tab:orange', linestyle='dashed', label='Cryo')
 
-    ax4.plot(time, Tcryo, color='red', label='Cryo Setpoint')
+    ax4.plot(time, Tcryo, color='red', label='Cryo Temp')
     ax4.plot(time, Trxn, color='pink', label='Reaction Temp')
 
     if tgms_df is not None:
@@ -165,7 +165,7 @@ def _(df, dt, pd, plt, tgms_df, tgms_time, time, xrange):
     # ax3.set_ylabel('Cryo Pressure (Torr)')
     ax4.set_ylabel('Temperature (K)')
     ax1.legend()
-    pressureplots = rxnP + vacP
+    pressureplots = rxnP #+ vacP
     pressurelabels = [l.get_label() for l in pressureplots]
     ax2.legend(pressureplots,pressurelabels)
     ax4.legend()
@@ -223,7 +223,6 @@ def _(
     np,
     plt,
     psat_h2s,
-    psat_o2,
     templist,
     time,
     timestart,
@@ -243,8 +242,8 @@ def _(
     dPTax.plot(time,dPdT,label='dPdT')
     # PTax.scatter(Tcryo,P1, label='Reaction Pressure',color='lightblue')
 
-    PTax.plot(templist-20,psat_h2s,color='goldenrod',label='Psat H2S')
-    PTax.plot(templist-20,psat_o2,color='purple',label='Psat O2')
+    PTax.plot(templist,psat_h2s,color='goldenrod',label='Psat H2S')
+    # PTax.plot(templist-20,psat_o2,color='purple',label='Psat O2')
 
 
     # Per-axis autoscale
