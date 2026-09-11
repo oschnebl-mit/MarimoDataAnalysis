@@ -202,10 +202,12 @@ def _(
         _sub["series"] = label_inputs[_name].value or _name
         _sub["curve"] = _curve
         _sub["order"] = range(len(_sub))   # preserve sweep order for line drawing
+        _sub["scanrate"] = float(_info['header']['SCANRATE'][1])
+        _sub["date"] = _info['header']['DATE'][1]
         frames.append(_sub)
 
     plotdf = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(
-        columns=["x", "y", "series", "curve", "order"])
+        columns=["x", "y", "series", "curve", "order","scanrate"])
     return (plotdf,)
 
 
@@ -219,7 +221,9 @@ def _(alt, mo, normalize, plotdf, x_axis, y_axis):
     chart = alt.Chart(plotdf).mark_line().encode(
         x=alt.X("x:Q", title=x_axis.value, scale=alt.Scale(zero=False, nice=False)),
         y=alt.Y("y:Q", title=_ylab, scale=alt.Scale(zero=False)),
-        color=alt.Color("series:N", title="Series",
+        detail = 'series:N',
+        size = alt.Size('date:N', title = 'Expt. Date'),
+        color=alt.Color("scanrate:Q", title="Scan Rate (mV/s)",
                         legend=alt.Legend(orient="right")),
         order=alt.Order("order:Q"),          # draw in sweep order (CV loops close)
         tooltip=["series:N", "curve:N", "x:Q", "y:Q"],
