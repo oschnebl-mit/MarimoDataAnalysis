@@ -723,7 +723,6 @@ def _(h2ssubdf, plot_dual_bode):
     h2ssubdf['Date_Temp'] = h2ssubdf['Date']+ "_" + h2ssubdf['Temp']
     # minidf = h2sdf[h2sdf['Date']=='20251120']
     plot_dual_bode(h2ssubdf,groupby='Date')
-
     return
 
 
@@ -741,7 +740,9 @@ def _(h2ssubdf, np, parse_multi_EIS_alt):
     synthesis['CellConst'] = np.where(synthesis['Date'].str.contains('202604'),0.08,0.8)
     synthesis['Kappa'] = synthesis['CellConst']/synthesis['Rsoln']
     synthesis['Solvent'] = np.where(synthesis['Measurement'].str.contains(r"(sulf)"), 'IL+Sulfolane', np.where(synthesis['Measurement'].str.contains(r"(S3MS)"),'IL+Sulfolane', np.where(synthesis['Measurement'].str.contains(r"Pyr"),'IL+Pyridine',np.where(synthesis['Measurement'].str.contains(r"(PC)"),'IL+PC','IL only'))))
-    # synthesis
+
+
+
     return (synthesis,)
 
 
@@ -768,7 +769,7 @@ def _(alt, synthesis):
     #     # color='Temperature:Q'
     # ).properties(width=300)
     # (boxplot1 | boxplot2)
-    base_x = alt.X('Date:N', axis=alt.Axis(title='Date',labelAngle=-45))
+    base_x = alt.X('Solvent:N', axis=alt.Axis(title='Solvent',labelAngle=-45))
 
     # Box + points for Rsoln
     box1 = alt.Chart(synthesis).mark_boxplot(extent='min-max',opacity=0.7).encode(
@@ -863,30 +864,45 @@ def _(
 
 
 @app.cell
-def _(alt, np, synthesis):
+def _(np, synthesis):
     pyrsyn2 = synthesis
-    pyrsyn2['mmoles H2S'] = pyrsyn2['Gas Volume']*0.044
+    pyrsyn2['mmoles H2S'] = pyrsyn2['Gas Volume']*0.045
     pyrsyn2['Tinv'] = 1/pyrsyn2['Temperature']
     pyrsyn2['mmoles IL'] = np.where(pyrsyn2['Date'].str.contains('260512'),0.5,1)
-    pyrsyn2['mmoles pyr'] = np.where(pyrsyn2['Date'].str.contains('260514'),1,0)
-    pyrsyn2['Mole Fraction IL'] = pyrsyn2['mmoles IL']/(pyrsyn2['mmoles pyr']+pyrsyn2['mmoles IL']+pyrsyn2['mmoles H2S'])
+    pyrsyn2['mmoles sol'] = np.where(pyrsyn2['Date'].str.contains('260512'),4, np.where(pyrsyn2['Date'].str.contains('260514'),1, np.where(pyrsyn2['Date'].str.contains('260528'), 2, np.where(pyrsyn2['Date'].str.contains('260602'), 2, np.where(pyrsyn2['Date'].str.contains('260610'),4,0)))))
+    pyrsyn2['Mole Fraction IL'] = pyrsyn2['mmoles IL']/(pyrsyn2['mmoles sol']+pyrsyn2['mmoles IL']+pyrsyn2['mmoles H2S'])
+    pyrsyn2['Mole Fraction H2S'] = pyrsyn2['mmoles H2S']/(pyrsyn2['mmoles sol']+pyrsyn2['mmoles IL']+pyrsyn2['mmoles H2S'])
+    pyrsyn2.to_csv('bmim_EIS_synthesis_df2',sep=',')
+
+    return (pyrsyn2,)
+
+
+@app.cell
+def _(alt, pyrsyn2):
 
     p1 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
         x=alt.X('Temperature:Q',scale=alt.Scale(domain=[150,205])),
         y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
-        shape = alt.Shape('Solvent:N',scale=alt.Scale(domain=['IL+Sulfolane','IL+PC'],range=['circle','triangle','square','cross']), legend='Solvent'),
+        shape = alt.Shape('Solvent:N',scale=alt.Scale(range=['circle','triangle','square','cross']), legend='Solvent'),
         tooltip = alt.Tooltip('Measurement'),
         color=alt.Color('Temperature:Q').scale(scheme="turbo")
     )
     p2 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
         x=alt.X('Mole Fraction IL:Q'),
         y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
-        shape = alt.Shape('Solvent:N',scale=alt.Scale(domain=['IL+Sulfolane','IL+PC'],range=['circle','triangle','square','cross']), legend='Solvent'),
+        shape = alt.Shape('Solvent:N',scale=alt.Scale(range=['circle','triangle','square','cross']), legend='Solvent'),
         tooltip = alt.Tooltip('Measurement'),
-        color=alt.Color('Temperature:Q').scale(scheme="turbo")
+        color=alt.Color('Temperature:Q').scale(domain=[150,205],scheme="turbo")
+    )
+    p3 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
+        x=alt.X('Mole Fraction H2S:Q',scale=alt.Scale(domain=[0.75,1.05])),
+        y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
+        shape = alt.Shape('Solvent:N',scale=alt.Scale(range=['circle','triangle','square','cross']), legend='Solvent'),
+        tooltip = alt.Tooltip('Measurement'),
+        color=alt.Color('Temperature:Q').scale(domain=[150,205],scheme="turbo")
     )
 
-    pchart = p1|p2
+    pchart = p1|p2|p3
     #checking for stronger dependence on temperature, volume, or date
     pchart.interactive().properties(title='IL+sulfolane',width=600)
     return
