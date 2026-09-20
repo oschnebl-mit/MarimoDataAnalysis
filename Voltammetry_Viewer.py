@@ -219,6 +219,49 @@ def _(files, mo, parse_gamry_dta):
 
 
 @app.cell
+def _(common, mo):
+    def _pick(prefs, idx):
+        for p in prefs:
+            if p in common:
+                return p
+        return common[min(idx, len(common) - 1)] if common else None
+
+    x_axis = mo.ui.dropdown(options=common, value=_pick(["Vf"], 0),
+                            label="X axis")
+    y_axis = mo.ui.dropdown(options=common, value=_pick(["Im"], 1),
+                            label="Y axis")
+    normalize = mo.ui.switch(value=False, label="Normalize I by sqrt(Scanrate)")
+    iRcorrect = mo.ui.switch(value=False, label="Apply iR correction")
+    mo.hstack([x_axis, y_axis, normalize, iRcorrect])
+    return iRcorrect, normalize, x_axis, y_axis
+
+
+@app.cell
+def _(alt, mo, normalize, plotdf, x_axis, y_axis):
+    mo.stop(plotdf.empty, mo.md("*Nothing to plot yet.*"))
+
+    _ylab = (f"{y_axis.value} / sqrt(scanrate)" if normalize.value else y_axis.value)
+    _zoom = alt.selection_interval(bind="scales")
+
+    chart = alt.Chart(plotdf).mark_circle(fillOpacity=0.5,strokeOpacity=0.1).encode(
+        x=alt.X("x:Q", title=x_axis.value, scale=alt.Scale(zero=False, nice=False)),
+        y=alt.Y("y:Q", title=_ylab, scale=alt.Scale(zero=False)),
+        detail = 'series:N',
+        color = 'date:N',
+        # size = alt.Size('date:N', title = 'Expt. Date'),
+        # color=alt.Color("scanrate:Q", title="Scan Rate (mV/s)"),
+        order=alt.Order("order:Q"),          # draw in sweep order (CV loops close)
+        tooltip=["series:N", "curve:N", "x:Q", "y:Q"]
+    ).add_params(_zoom).properties(width=680, height=440)
+
+
+    plot = mo.ui.altair_chart(chart, chart_selection=False,
+                              legend_selection=True)
+    plot.interactive()
+    return (chart,)
+
+
+@app.cell
 def _():
     # parsed["20260824_BmPTf2N_S3MS_200K_550Torr_p4V_RCV3.DTA"]["header"]["SCANRATE"][1]
     return
@@ -240,24 +283,6 @@ def _(parsed):
         common = nc if common is None else (common & nc)
     common = sorted(common or [])
     return (common,)
-
-
-@app.cell
-def _(common, mo):
-    def _pick(prefs, idx):
-        for p in prefs:
-            if p in common:
-                return p
-        return common[min(idx, len(common) - 1)] if common else None
-
-    x_axis = mo.ui.dropdown(options=common, value=_pick(["Vf"], 0),
-                            label="X axis")
-    y_axis = mo.ui.dropdown(options=common, value=_pick(["Im"], 1),
-                            label="Y axis")
-    normalize = mo.ui.switch(value=False, label="Normalize Y by area (→ density)")
-    iRcorrect = mo.ui.switch(value=False, label="Apply iR correction")
-    mo.hstack([x_axis, y_axis, normalize, iRcorrect])
-    return iRcorrect, normalize, x_axis, y_axis
 
 
 @app.cell
@@ -325,60 +350,23 @@ def _(
             "x": _df[x_axis.value].astype(float),
             "y": _df[y_axis.value].astype(float),
         })
-        if normalize.value:
-            _sub["y"] = _sub["y"] / _info["area"]
-        if iRcorrect.value:
-            _sub["x"] = _sub["x"] - _sub["y"]*Ru_inputs[_name].value
         # _sub["series"] = label_inputs[_name].value or _name
         _sub["series"] = _name
         _sub["curve"] = _curve
         _sub["order"] = range(len(_sub))   # preserve sweep order for line drawing
         _sub["scanrate"] = float(_info['header']['SCANRATE'][1])
-<<<<<<< HEAD
         _sub["date"] = _info['header']['DATE'][1]
+
+        if normalize.value:
+            _sub["y"] = _sub["y"] / _info["area"]
+            # _sub["y_norm"] = _sub["y"]/np.sqrt(_sub["scanrate"])
+        if iRcorrect.value:
+            _sub["x"] = _sub["x"] - _sub["y"]*Ru_inputs[_name].value
         frames.append(_sub)
 
-    plotdf = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(
+        plotdf = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(
         columns=["x", "y", "series", "curve", "order","scanrate"])
-=======
-        _sub["date"] = _sub["series"].str.extract(r"(20260\d*)_")
-        frames.append(_sub)
-
-    plotdf = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(
-        columns=["x", "y", "series", "curve", "order", "scanrate", "date"])
->>>>>>> 3d267f422013d2ba8dc70a1fbae837447ab7dcf3
     return (plotdf,)
-
-
-@app.cell
-def _(alt, mo, normalize, plotdf, x_axis, y_axis):
-    mo.stop(plotdf.empty, mo.md("*Nothing to plot yet.*"))
-
-    _ylab = (f"{y_axis.value} / area" if normalize.value else y_axis.value)
-    _zoom = alt.selection_interval(bind="scales")
-
-    chart = alt.Chart(plotdf).mark_circle(fillOpacity=0.1,strokeOpacity=0.1).encode(
-        x=alt.X("x:Q", title=x_axis.value, scale=alt.Scale(zero=False, nice=False)),
-        y=alt.Y("y:Q", title=_ylab, scale=alt.Scale(zero=False)),
-<<<<<<< HEAD
-        detail = 'series:N',
-        size = alt.Size('date:N', title = 'Expt. Date'),
-        color=alt.Color("scanrate:Q", title="Scan Rate (mV/s)",
-=======
-        color=alt.Color("date:N", title="Expt Date",
->>>>>>> 3d267f422013d2ba8dc70a1fbae837447ab7dcf3
-                        legend=alt.Legend(orient="right")),
-        detail = "series:N",
-        size = "scanrate:Q",
-        order=alt.Order("order:Q"),          # draw in sweep order (CV loops close)
-        tooltip=["series:N", "curve:N", "x:Q", "y:Q"],
-    ).add_params(_zoom).properties(width=680, height=440)
-
-
-    plot = mo.ui.altair_chart(chart, chart_selection=False,
-                              legend_selection=True)
-    plot.interactive()
-    return (chart,)
 
 
 @app.cell

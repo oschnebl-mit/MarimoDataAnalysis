@@ -25,8 +25,8 @@ def _(os):
     if os.path.exists(cache_dir):
         shutil.rmtree(cache_dir)
 
-    basepath = r'C:\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data\Jaramillo lab\CryoEchem'
-    # basepath = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/Jaramillo lab/CryoEchem/Gamry Data'
+    # basepath = r'C:\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data\Jaramillo lab\CryoEchem'
+    basepath = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/Jaramillo lab/CryoEchem/Gamry Data'
     return (basepath,)
 
 
@@ -723,7 +723,6 @@ def _(h2ssubdf, plot_dual_bode):
     h2ssubdf['Date_Temp'] = h2ssubdf['Date']+ "_" + h2ssubdf['Temp']
     # minidf = h2sdf[h2sdf['Date']=='20251120']
     plot_dual_bode(h2ssubdf,groupby='Date')
-
     return
 
 
@@ -742,11 +741,30 @@ def _(h2ssubdf, np, parse_multi_EIS_alt):
     synthesis['Kappa'] = synthesis['CellConst']/synthesis['Rsoln']
     synthesis['Solvent'] = np.where(synthesis['Measurement'].str.contains(r"(sulf)"), 'IL+Sulfolane', np.where(synthesis['Measurement'].str.contains(r"(S3MS)"),'IL+Sulfolane', np.where(synthesis['Measurement'].str.contains(r"Pyr"),'IL+Pyridine',np.where(synthesis['Measurement'].str.contains(r"(PC)"),'IL+PC','IL only'))))
     # synthesis
-    return (synthesis,)
+    return
 
 
 @app.cell
-def _(alt, synthesis):
+def _(np, pd):
+    syn1 = pd.read_csv(r'/Users/ods/MIT Dropbox/Olivia Schneble/10-19 Admin and Logistics/11 Publishing and Reporting/11.06 H2S Electrolyte Paper/bmim_EIS_synthesis_df2.csv')
+    syn2 = syn1.iloc[np.where(syn1['Temperature']==190)]
+    syn2
+    return (syn2,)
+
+
+@app.cell
+def _(pd, syn2):
+    syn3 = pd.DataFrame(syn2.groupby('Solvent')['Kappa'].mean())
+    syn3['Rsoln'] = syn2.groupby('Solvent')['Rsoln'].mean()
+    syn3['Kappa_mS'] = syn3['Kappa']*1e3
+    syn3['stdev'] = syn2.groupby('Solvent')['Kappa'].std()
+    syn3['Kappa_max_mS'] = syn2.groupby('Solvent')['Kappa'].max()*1e3
+    syn3
+    return
+
+
+@app.cell
+def _(alt, syn2):
     # boxplot1 = alt.Chart(synthesis).mark_boxplot(extent='min-max').encode(
     #     x='Date:N',
     #     y=alt.Y('Rsoln:Q',scale=alt.Scale(type='log'),axis=alt.Axis(format='.2s')),
@@ -768,17 +786,17 @@ def _(alt, synthesis):
     #     # color='Temperature:Q'
     # ).properties(width=300)
     # (boxplot1 | boxplot2)
-    base_x = alt.X('Date:N', axis=alt.Axis(title='Date',labelAngle=-45))
+    base_x = alt.X('Solvent:N', axis=alt.Axis(title='Solvent',labelAngle=-45))
 
     # Box + points for Rsoln
-    box1 = alt.Chart(synthesis).mark_boxplot(extent='min-max',opacity=0.7).encode(
+    box1 = alt.Chart(syn2).mark_boxplot(extent='min-max',opacity=0.7).encode(
         x=base_x,
         y=alt.Y('Gsoln:Q',
                 scale=alt.Scale(type='log'),
                 axis=alt.Axis(format='.2s'))
     )
 
-    points1 = alt.Chart(synthesis).mark_circle(size=40, opacity=0.6).encode(
+    points1 = alt.Chart(syn2).mark_circle(size=40, opacity=0.6).encode(
         x=base_x,
         y=alt.Y('Gsoln:Q', scale=alt.Scale(type='log')),
         tooltip=[
@@ -796,21 +814,23 @@ def _(alt, synthesis):
 
 
     # Box + points for Kappa
-    box2 = alt.Chart(synthesis).mark_boxplot(extent='min-max',opacity=0.5).encode(
+    # box3 = alt.Chart(syn2).mark_boxplot()
+    box2 = alt.Chart(syn2).mark_boxplot(color='gray',opacity=0.5).encode(
         x=base_x,
         y=alt.Y('Kappa:Q',
                 scale=alt.Scale(type='log'),
                 axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
+        tooltip = alt.Tooltip('Gsoln',format='.2s')
     )
 
-    points2 = alt.Chart(synthesis).mark_circle(size=40, opacity=0.6).encode(
+    points2 = alt.Chart(syn2).mark_circle(size=40, opacity=0.6).encode(
         x=base_x,
         y=alt.Y('Kappa:Q', scale=alt.Scale(type='log')),
         tooltip=[
             alt.Tooltip('Measurement'),
             alt.Tooltip('Rsoln', format='.2s', title="|Z| (Ohm)")
         ],
-        color=alt.Color('Temperature:Q').scale(scheme="turbo"),
+        color=alt.Color('Pressure:Q').scale(scheme="turbo"),
         xOffset=alt.X('jitter:Q')
     ).transform_calculate(
         jitter="(random() - 0.5) * 0.1"
@@ -824,8 +844,8 @@ def _(alt, synthesis):
 
 
 @app.cell
-def _(mo):
-    browser2 = mo.ui.file_browser(initial_path=r'C:\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data\Jaramillo lab\CryoEchem\Gamry Data',multiple=True,selection_mode='file',label='Select files...')
+def _(basepath, mo):
+    browser2 = mo.ui.file_browser(initial_path=basepath,multiple=True,selection_mode='file',label='Select files...')
     return (browser2,)
 
 
@@ -863,32 +883,49 @@ def _(
 
 
 @app.cell
-def _(alt, np, synthesis):
-    pyrsyn2 = synthesis
-    pyrsyn2['mmoles H2S'] = pyrsyn2['Gas Volume']*0.044
-    pyrsyn2['Tinv'] = 1/pyrsyn2['Temperature']
-    pyrsyn2['mmoles IL'] = np.where(pyrsyn2['Date'].str.contains('260512'),0.5,1)
-    pyrsyn2['mmoles pyr'] = np.where(pyrsyn2['Date'].str.contains('260514'),1,0)
-    pyrsyn2['Mole Fraction IL'] = pyrsyn2['mmoles IL']/(pyrsyn2['mmoles pyr']+pyrsyn2['mmoles IL']+pyrsyn2['mmoles H2S'])
+def _(np, pd):
+    pyrsyn2 = pd.read_csv(r'/Users/ods/MIT Dropbox/Olivia Schneble/10-19 Admin and Logistics/11 Publishing and Reporting/11.06 H2S Electrolyte Paper/bmim_EIS_synthesis_df2.csv')
+    pyrsyn2['Mole Fraction Solvent'] = pyrsyn2['mmoles sol']/(pyrsyn2['mmoles sol']+pyrsyn2['mmoles H2S']+pyrsyn2['mmoles IL'])
+    pyrsyn2['solvent polarity'] = np.where(pyrsyn2['Solvent'].str.contains('PC'),65, np.where(pyrsyn2['Solvent'].str.contains('Sulf'),44, np.where(pyrsyn2['Solvent'].str.contains('Pyr'),12,9)))
+    pyrsyn2['avg polarity'] = pyrsyn2['solvent polarity']*pyrsyn2['Mole Fraction Solvent'] + 9*pyrsyn2['Mole Fraction H2S']
+    return (pyrsyn2,)
+
+
+@app.cell
+def _(alt, pyrsyn2):
+    # pyrsyn2 = synthesis
+    # pyrsyn2['mmoles H2S'] = pyrsyn2['Gas Volume']*0.044
+    # pyrsyn2['Tinv'] = 1/pyrsyn2['Temperature']
+    # pyrsyn2['mmoles IL'] = np.where(pyrsyn2['Date'].str.contains('260512'),0.5,1)
+    # pyrsyn2['mmoles pyr'] = np.where(pyrsyn2['Date'].str.contains('260514'),1,0)
+    # pyrsyn2['Mole Fraction H2S'] = pyrsyn2['mmoles H2S']/(pyrsyn2['mmoles sol']+pyrsyn2['mmoles IL']+pyrsyn2['mmoles H2S'])
+    pyrsyn2['total mmoles'] = pyrsyn2['mmoles H2S'] + pyrsyn2['mmoles IL'] + pyrsyn2['mmoles sol']
 
     p1 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
-        x=alt.X('Temperature:Q',scale=alt.Scale(domain=[150,205])),
+        x=alt.X('Pressure:Q',scale=alt.Scale(domain=[150,700])),
         y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
-        shape = alt.Shape('Solvent:N',scale=alt.Scale(domain=['IL+Sulfolane','IL+PC'],range=['circle','triangle','square','cross']), legend='Solvent'),
+        shape = alt.Shape('Solvent:N',range=['circle','triangle','square','cross'], legend='Solvent'),
+        tooltip = alt.Tooltip('Measurement'),
+        color=alt.Color('Temperature:Q').scale(scheme="turbo", domain=[150,205])
+    )
+    p2 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
+        x=alt.X('Total Volume:Q'),
+        y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
+        shape = alt.Shape('Solvent:N',range=['circle','triangle','square','cross'], legend='Solvent'),
         tooltip = alt.Tooltip('Measurement'),
         color=alt.Color('Temperature:Q').scale(scheme="turbo")
     )
-    p2 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
-        x=alt.X('Mole Fraction IL:Q'),
+    p3 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
+        x=alt.X('Mole Fraction H2S:Q', scale=alt.Scale(domain=[0.6,1.1])),
         y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
-        shape = alt.Shape('Solvent:N',scale=alt.Scale(domain=['IL+Sulfolane','IL+PC'],range=['circle','triangle','square','cross']), legend='Solvent'),
+        shape = alt.Shape('Solvent:N',range=['circle','triangle','square','cross'], legend='Solvent'),
         tooltip = alt.Tooltip('Measurement'),
         color=alt.Color('Temperature:Q').scale(scheme="turbo")
     )
 
-    pchart = p1|p2
+    pchart = p1|p3
     #checking for stronger dependence on temperature, volume, or date
-    pchart.interactive().properties(title='IL+sulfolane',width=600)
+    pchart.interactive()
     return
 
 
