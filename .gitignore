@@ -1,2 +1,8 @@
 .venv/
 __marimo__/
+<<<<<<< HEAD
+*.csv
+.DS_Store
+*.png
+=======
+>>>>>>> 3d267f422013d2ba8dc70a1fbae837447ab7dcf3
