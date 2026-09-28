@@ -888,6 +888,7 @@ def _(np, pd):
     pyrsyn2['Mole Fraction Solvent'] = pyrsyn2['mmoles sol']/(pyrsyn2['mmoles sol']+pyrsyn2['mmoles H2S']+pyrsyn2['mmoles IL'])
     pyrsyn2['solvent polarity'] = np.where(pyrsyn2['Solvent'].str.contains('PC'),65, np.where(pyrsyn2['Solvent'].str.contains('Sulf'),44, np.where(pyrsyn2['Solvent'].str.contains('Pyr'),12,9)))
     pyrsyn2['avg polarity'] = pyrsyn2['solvent polarity']*pyrsyn2['Mole Fraction Solvent'] + 9*pyrsyn2['Mole Fraction H2S']
+    pyrsyn2.to_csv('bmim_EIS_synthesis_df3.csv')
     return (pyrsyn2,)
 
 
