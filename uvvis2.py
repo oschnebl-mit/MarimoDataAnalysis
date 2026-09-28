@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.23.15"
+__generated_with = "0.25.0"
 app = marimo.App(width="medium")
 
 
@@ -490,9 +490,10 @@ def _(alt, conjugate_axis, ev_axis1, mo, nm_range1, sample1, smooth1, tidy):
         alt.Tooltip("eV:Q", title="E (eV)", format=".3f"),
         alt.Tooltip("value:Q", title="Value (%)", format=".3f"),
     ]
+    _x_bare = alt.X("nm:Q", axis=None, scale=alt.Scale(domain=[_lo, _hi], nice=False))
     _layers = [
         alt.Chart(_df).mark_line(strokeWidth=1.9, clip=True).encode(x=_x, y=_y, color=_color),
-        alt.Chart(_df).mark_circle(size=70, opacity=0).encode(x=_x, y=_y, color=_color, tooltip=_tip),
+        alt.Chart(_df).mark_circle(size=70, opacity=0).encode(x=_x_bare, y=_y, color=_color, tooltip=_tip),
     ]
     if ev_axis1.value:
         _sec = conjugate_axis([_lo, _hi], primary="nm")
@@ -500,7 +501,7 @@ def _(alt, conjugate_axis, ev_axis1, mo, nm_range1, sample1, smooth1, tidy):
             _layers.append(_sec)
 
     mo.ui.altair_chart(
-        alt.layer(*_layers).resolve_scale(x="shared", y="shared").properties(
+        alt.layer(*_layers).resolve_scale(x="shared", y="shared").resolve_axis(x="independent").properties(
             height=420, width="container", title=f"{sample1.value} — %T / %R / %A"
         ),
         chart_selection=False, legend_selection=True,
@@ -588,16 +589,17 @@ def _(absA_smooth, absA_x, alt, conjugate_axis, mo, optics, sample_order):
         alt.Tooltip("eV:Q", title="E (eV)", format=".3f"),
         alt.Tooltip("pctA:Q", title="%A", format=".2f"),
     ]
+    _x_bare = alt.X(f"{_xf}:Q", axis=None, scale=alt.Scale(domain=_dom, nice=False))
     _layers = [
         alt.Chart(_df).mark_line(strokeWidth=1.9, clip=True).encode(x=_x, y=_y, color=_color),
-        alt.Chart(_df).mark_circle(size=70, opacity=0).encode(x=_x, y=_y, color=_color, tooltip=_tip),
+        alt.Chart(_df).mark_circle(size=70, opacity=0).encode(x=_x_bare, y=_y, color=_color, tooltip=_tip),
     ]
     _sec = conjugate_axis(_dom, primary=_xf)
     if _sec is not None:
         _layers.append(_sec)
 
     mo.ui.altair_chart(
-        alt.layer(*_layers).resolve_scale(x="shared", y="shared").properties(
+        alt.layer(*_layers).resolve_scale(x="shared", y="shared").resolve_axis(x="independent").properties(
             height=420, width="container", title="%A overlay — all samples"
         ),
         chart_selection=False, legend_selection=True,
@@ -750,17 +752,19 @@ def _(
             if _xdom[0] <= _eg <= _xdom[1]:
                 _rules.append({"sample": _s, "eV": _eg, "E_g": _eg})
 
+    _x_bare = alt.X("eV:Q", axis=None, scale=alt.Scale(domain=_xdom, nice=False, clamp=True))
+
     _layers = []
     if _bands:
         _layers.append(
-            alt.Chart(pd.DataFrame(_bands)).mark_rect(opacity=0.09, color="#4c78a8", stroke=None)
-            .encode(x=_x, x2="eV2:Q", y=_y, y2="y2:Q")
+            alt.Chart(pd.DataFrame(_bands)).mark_rect(opacity=0.09, stroke=None)
+            .encode(x=_x_bare, x2="eV2:Q", y=_y, y2="y2:Q", color=_color)
         )
 
     _layers.append(alt.Chart(_d).mark_line(strokeWidth=1.9, clip=True).encode(x=_x, y=_y, color=_color))
     _layers.append(
         alt.Chart(_d).mark_circle(size=70, opacity=0).encode(
-            x=_x, y=_y, color=_color,
+            x=_x_bare, y=_y, color=_color,
             tooltip=[
                 alt.Tooltip("sample:N"),
                 alt.Tooltip("eV:Q", title="E (eV)", format=".3f"),
@@ -775,7 +779,7 @@ def _(
     if len(_seg_df):
         _layers.append(
             alt.Chart(_seg_df).mark_line(strokeDash=[6, 4], strokeWidth=1.5, clip=True)
-            .encode(x=_x, y=_y, color=_color, detail="sample:N")
+            .encode(x=_x_bare, y=_y, color=_color, detail="sample:N")
         )
 
     _rule_df = pd.DataFrame(_rules)
@@ -783,7 +787,7 @@ def _(
         _layers.append(
             alt.Chart(_rule_df).mark_rule(strokeDash=[2, 3], opacity=0.85, clip=True)
             .encode(
-                x=_x, y=alt.datum(_ydom[0]), y2=alt.datum(_ydom[1]), color=_color,
+                x=_x_bare, y=alt.datum(_ydom[0]), y2=alt.datum(_ydom[1]), color=_color,
                 tooltip=[alt.Tooltip("sample:N"), alt.Tooltip("E_g:Q", title="E_g (eV)", format=".3f")],
             )
         )
@@ -793,7 +797,7 @@ def _(
         _layers.append(_sec)
 
     tauc_chart = mo.ui.altair_chart(
-        alt.layer(*_layers).resolve_scale(x="shared", y="shared").properties(
+        alt.layer(*_layers).resolve_scale(x="shared", y="shared").resolve_axis(x="independent").properties(
             height=440, width="container", title="Tauc plot — sample comparison",
         ),
         chart_selection=False, legend_selection=True,
@@ -808,6 +812,11 @@ def _(
             "_Place the fit window on the linear onset to extract E_g._"
         ),
     ])
+    return
+
+
+@app.cell
+def _():
     return
 
 
