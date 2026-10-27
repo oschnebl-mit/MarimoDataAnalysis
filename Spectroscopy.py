@@ -13,7 +13,7 @@ def _():
     from io import StringIO
 
 
-    return go, mo, pd
+    return mo, pd
 
 
 @app.cell
@@ -29,31 +29,34 @@ def _(mo):
 @app.cell
 def _(mo):
     file = mo.ui.file_browser(initial_path="/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data",filetypes=[".csv", ".txt"],
-                       multiple=False, label="Select data file")
+                       multiple=True, label="Select data file")
     file
     return (file,)
 
 
 @app.cell
 def _(file):
-    file.value[0].name
+    for fn in file.value:
+        print(fn.name)
     return
 
 
 @app.cell
 def _(file, pd):
-    df = pd.read_csv(file.value[0].path,header=1)
+    df = pd.DataFrame()
+    for f in file.value:
+        df = pd.concat([df,pd.read_csv(f.path,header=1)])
     return (df,)
 
 
 @app.cell
 def _(df):
-    df.columns
+    df.head()
     return
 
 
-@app.cell
-def _(df, file, go):
+app._unparsable_cell(
+    r"""
 
 
     # Get column names (handle variations)
@@ -89,12 +92,16 @@ def _(df, file, go):
     wl_max = wavelength.max()
 
     fig.add_trace(go.Scatter(
-        x=energy_ev,
+        x=wavelength,
         y=a_eff,
         mode='lines',
-        name='UV-Vis',
+        name='T',
         line=dict(color='#1f77b4', width=2),
         xaxis='x2'
+    ))
+    fig.add_trace(go.Scatter(
+        x=wavelength,
+        y = 
     ))
 
     fig.update_layout(
@@ -120,7 +127,9 @@ def _(df, file, go):
         # font=dict(size=12),
         # margin=dict(t=100)
     )
-    return
+    """,
+    name="_"
+)
 
 
 @app.cell

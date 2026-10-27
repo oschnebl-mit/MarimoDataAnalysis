@@ -745,21 +745,21 @@ def _(h2ssubdf, np, parse_multi_EIS_alt):
 
 
 @app.cell
-def _(np, pd):
+def _(pd):
     syn1 = pd.read_csv(r'/Users/ods/MIT Dropbox/Olivia Schneble/10-19 Admin and Logistics/11 Publishing and Reporting/11.06 H2S Electrolyte Paper/bmim_EIS_synthesis_df2.csv')
-    syn2 = syn1.iloc[np.where(syn1['Temperature']==190)]
-    syn2
+    # syn2 = syn1.iloc[np.where(syn1['Temperature']==190)]
+    syn2=syn1
     return (syn2,)
 
 
 @app.cell
-def _(pd, syn2):
-    syn3 = pd.DataFrame(syn2.groupby('Solvent')['Kappa'].mean())
-    syn3['Rsoln'] = syn2.groupby('Solvent')['Rsoln'].mean()
-    syn3['Kappa_mS'] = syn3['Kappa']*1e3
-    syn3['stdev'] = syn2.groupby('Solvent')['Kappa'].std()
-    syn3['Kappa_max_mS'] = syn2.groupby('Solvent')['Kappa'].max()*1e3
-    syn3
+def _():
+    # syn3 = pd.DataFrame(syn2.groupby('Solvent')['Kappa'].mean())
+    # syn3['Rsoln'] = syn2.groupby('Solvent')['Rsoln'].mean()
+    # syn3['Kappa_mS'] = syn3['Kappa']*1e3
+    # syn3['stdev'] = syn2.groupby('Solvent')['Kappa'].std()
+    # syn3['Kappa_max_mS'] = syn2.groupby('Solvent')['Kappa'].max()*1e3
+    # syn3
     return
 
 
@@ -830,7 +830,7 @@ def _(alt, syn2):
             alt.Tooltip('Measurement'),
             alt.Tooltip('Rsoln', format='.2s', title="|Z| (Ohm)")
         ],
-        color=alt.Color('Pressure:Q').scale(scheme="turbo"),
+        color=alt.Color('Temperature:Q').scale(scheme="turbo"),
         xOffset=alt.X('jitter:Q')
     ).transform_calculate(
         jitter="(random() - 0.5) * 0.1"
@@ -894,17 +894,10 @@ def _(np, pd):
 
 @app.cell
 def _(alt, pyrsyn2):
-    # pyrsyn2 = synthesis
-    # pyrsyn2['mmoles H2S'] = pyrsyn2['Gas Volume']*0.044
-    # pyrsyn2['Tinv'] = 1/pyrsyn2['Temperature']
-    # pyrsyn2['mmoles IL'] = np.where(pyrsyn2['Date'].str.contains('260512'),0.5,1)
-    # pyrsyn2['mmoles pyr'] = np.where(pyrsyn2['Date'].str.contains('260514'),1,0)
-    # pyrsyn2['Mole Fraction H2S'] = pyrsyn2['mmoles H2S']/(pyrsyn2['mmoles sol']+pyrsyn2['mmoles IL']+pyrsyn2['mmoles H2S'])
-    pyrsyn2['total mmoles'] = pyrsyn2['mmoles H2S'] + pyrsyn2['mmoles IL'] + pyrsyn2['mmoles sol']
-
     p1 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
         x=alt.X('Pressure:Q',scale=alt.Scale(domain=[150,700])),
         y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
+
         shape = alt.Shape('Solvent:N',range=['circle','triangle','square','cross'], legend='Solvent'),
         tooltip = alt.Tooltip('Measurement'),
         color=alt.Color('Temperature:Q').scale(scheme="turbo", domain=[150,205])
@@ -918,13 +911,9 @@ def _(alt, pyrsyn2):
     )
     p3 = alt.Chart(pyrsyn2).mark_point(size=200,filled=True,stroke='black').encode(
         x=alt.X('Mole Fraction H2S:Q', scale=alt.Scale(domain=[0.6,1.1])),
-        y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s')),
-        shape = alt.Shape('Solvent:N',range=['circle','triangle','square','cross'], legend='Solvent'),
-        tooltip = alt.Tooltip('Measurement'),
-        color=alt.Color('Temperature:Q').scale(scheme="turbo")
+        y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.2s'))
     )
-
-    pchart = p1|p3
+    pchart = p1|p2
     #checking for stronger dependence on temperature, volume, or date
     pchart.interactive()
     return
