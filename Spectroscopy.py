@@ -28,7 +28,7 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    file = mo.ui.file_browser(initial_path="/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data",filetypes=[".csv", ".txt"],
+    file = mo.ui.file_browser(initial_path=r"C:\Users\oschn\MIT Dropbox\Olivia Schneble\jaramillogroupshared\Data",filetypes=[".csv", ".txt"],
                        multiple=False, label="Select data file")
     file
     return (file,)
@@ -42,7 +42,7 @@ def _(file):
 
 @app.cell
 def _(file, pd):
-    df = pd.read_csv(file.value[0].path,header=1)
+    df = pd.read_csv(file.value[0].path,header=0)
     return (df,)
 
 
