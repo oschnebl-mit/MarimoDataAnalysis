@@ -137,7 +137,49 @@ def _(Path, csv, pd):
 
 
 @app.cell
-def _(pd):
+def _(StringIO, os, pd):
+    def read_gamry_dta_alt(path):
+        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
+
+        # Find where the data block begins
+        start = None
+        for i, line in enumerate(lines):
+            if line.strip().startswith("ZCURVE"):
+                start = i
+                break
+        if start is None:
+            raise ValueError("ZCURVE marker not found")
+
+        # Keep everything after the ZCURVE line
+        data_lines = lines[start+1:]
+
+        # Remove unit row(s) and any trailing error/abort lines
+        cleaned = []
+        for ln in data_lines:
+            s = ln.strip()
+            if not s:
+                continue
+            if s.startswith("#"):          # units row
+                continue
+            if "Measurement aborted" in s:
+                continue
+            cleaned.append(ln)
+
+        # Read as strings first to avoid dtype mixing
+        df = pd.read_csv(
+            StringIO("".join(cleaned)),
+            sep="\t",
+            header=0,          # first remaining line is the column header
+            dtype=str,
+            engine="python"
+        )
+
+        # Optional: convert numeric columns
+        for col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+        df['Measurement'] = os.path.basename(path)
+        return df
     def _to_numeric(series):
         conv = pd.to_numeric(series, errors="coerce")
         return series if conv.notna().sum() == 0 else conv
@@ -199,23 +241,49 @@ def _(mo):
 
 
 @app.cell
-def _(files, mo, parse_gamry_dta):
-    mo.stop(not files.value, mo.md("⬆️ **Upload at least one `.dta` file.**"))
+def _(mo):
+    browser = mo.ui.file_browser(initial_path=r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data',multiple=True)
+    # /Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/CMSE X-ray SEF/Rigaku SmartLab/Olivia
+    browser
+    return (browser,)
+
+
+@app.cell
+def _(browser, files, mo, parse_gamry_dta):
+    from pathlib import Path
+
+    def _iter_sources():
+        """Yield (name, raw_contents) from both the uploader and the file browser."""
+        # 1) Uploaded files: contents are already in memory
+        for f in (files.value or []):
+            yield f.name, f.contents
+
+        # 2) File-browser selections: read from disk
+        for info in (browser.value or []):
+            p = Path(info.path)
+            if info.is_directory:
+                # If a folder is selected, load every .DTA file inside it
+                for child in sorted(p.glob("*.[dD][tT][aA]")):
+                    yield child.name, child.read_bytes()
+            else:
+                yield info.name, p.read_bytes()
+
 
     parsed = {}          # {filename: {"header":..., "tables":..., "area":float}}
-    for _f in files.value:
-        _raw = _f.contents
+    for _name, _raw in _iter_sources():
         _txt = _raw.decode("latin-1") if isinstance(_raw, bytes) else _raw
         _hdr, _tabs = parse_gamry_dta(_txt)
         try:
             _area = float(_hdr.get("AREA", ["", "1.0"])[1])
         except (ValueError, IndexError):
             _area = 1.0
-        parsed[_f.name] = {"header": _hdr, "tables": _tabs, "area": _area}
+        if _name in parsed:                      # same filename from both sources / folders
+            _name = f"{_name} ({len(parsed)})"
+        parsed[_name] = {"header": _hdr, "tables": _tabs, "area": _area}
 
     mo.md(f"**Loaded {len(parsed)} file(s):** "
-          + ", ".join(f"`{n}`" for n in parsed))
-    return (parsed,)
+          + (", ".join(f"`{n}`" for n in parsed) if parsed else "_none selected_"))
+    return Path, parsed
 
 
 @app.cell
@@ -243,7 +311,7 @@ def _(alt, mo, normalize, plotdf, x_axis, y_axis):
     _ylab = (f"{y_axis.value} / sqrt(scanrate)" if normalize.value else y_axis.value)
     _zoom = alt.selection_interval(bind="scales")
 
-    chart = alt.Chart(plotdf).mark_circle(fillOpacity=0.5,strokeOpacity=0.1).encode(
+    chart_pts = alt.Chart(plotdf).mark_circle(fillOpacity=0.5,strokeOpacity=0.1).encode(
         x=alt.X("x:Q", title=x_axis.value, scale=alt.Scale(zero=False, nice=False)),
         y=alt.Y("y:Q", title=_ylab, scale=alt.Scale(zero=False)),
         detail = 'series:N',
@@ -254,11 +322,17 @@ def _(alt, mo, normalize, plotdf, x_axis, y_axis):
         tooltip=["series:N", "curve:N", "x:Q", "y:Q"]
     ).add_params(_zoom).properties(width=680, height=440)
 
-
-    plot = mo.ui.altair_chart(chart, chart_selection=False,
+    chart_line = alt.Chart(plotdf).mark_line(strokeOpacity=0.5).encode(
+        x=alt.X("x:Q", title=x_axis.value, scale=alt.Scale(zero=False, nice=False)),
+        y=alt.Y("y:Q", title=_ylab, scale=alt.Scale(zero=False)),
+        detail = 'series:N',
+        color = 'date:N',
+        order = alt.Order("order:Q")
+    )
+    plot = mo.ui.altair_chart((chart_line+chart_pts), chart_selection=False,
                               legend_selection=True)
     plot.interactive()
-    return (chart,)
+    return
 
 
 @app.cell
