@@ -806,7 +806,6 @@ def _(np, pd, syn1):
     syn3['stdev'] = syn2.groupby('Additive')['Kappa'].std()
     syn3['Kappa_max_mS'] = syn2.groupby('Additive')['Kappa'].max()*1e3
     syn3
-    return
 
 
 @app.cell
@@ -876,9 +875,9 @@ def _(alt, syn1):
         tooltip=[
             alt.Tooltip('Measurement'),
             alt.Tooltip('Rsoln', format='.2s', title="|Z| (Ohm)"),
-            alt.Tooltip('Temp_corr2')
-        ],
-        color=alt.Color('mmoles H2S:Q').scale(scheme="turbo"),
+            alt.Tooltip('Temp_corr')],
+        color=alt.Color('Temperature:Q').scale(scheme="turbo"),
+
         xOffset=alt.X('jitter:Q')
     ).transform_calculate(
         jitter="(random() - 0.5) * 0.1"
@@ -944,29 +943,6 @@ def _(syn1):
     pyrsyn2
     return (pyrsyn2,)
 
-
-@app.cell
-def _(alt, pyrsyn2):
-    p1 = alt.Chart(pyrsyn2).mark_point(size=300,filled=True, stroke='black').encode(
-        x=alt.X('Temp_corr:Q',scale=alt.Scale(type='linear',domain=[180,210]),axis=alt.Axis(title='Temperature (K)')),
-        y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.1e')),
-        shape = alt.Shape('Solvent:N',range=['circle','triangle','square','cross'], legend='Solvent'),
-        tooltip = alt.Tooltip('Measurement'),
-        color=alt.Color('Temp_corr:Q').scale(scheme="turbo", domain=[180,205])
-    )
-    p2 = alt.Chart(pyrsyn2).mark_point(size=300,filled=True,stroke='black').encode(
-        x=alt.X('Mole Fraction H2S:Q',scale=alt.Scale(domain=[0.6,1.0])),
-        y=alt.Y('Kappa:Q',scale=alt.Scale(type='log'),axis=alt.Axis(title='Conductivity (S/cm)',format='.1e')),
-        shape = alt.Shape('Solvent:N',range=['circle','triangle','square','cross'], legend='Solvent'),
-        tooltip = alt.Tooltip('Measurement'),
-        color=alt.Color('Temp_corr:Q').scale(scheme="turbo")
-    )
-
-
-    pchart = p1&p2
-    #checking for stronger dependence on temperature, volume, or date
-    pchart.interactive()
-    return
 
 
 @app.cell
