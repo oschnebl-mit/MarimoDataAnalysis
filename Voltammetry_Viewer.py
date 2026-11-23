@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.23.15"
+__generated_with = "0.25.0"
 app = marimo.App(width="medium")
 
 
@@ -12,10 +12,10 @@ def _():
     import pandas as pd
     import altair as alt
 
-    return alt, mo, os, pd
+    return alt, mo, np, os, pd
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # CV / LSV Overlay Viewer
@@ -24,6 +24,13 @@ def _(mo):
     with a legend. Optionally normalize current by area → current density.
     """)
     return
+
+
+@app.cell
+def _():
+    # data_path = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data'
+    data_path = r'\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data'
+    return (data_path,)
 
 
 @app.cell
@@ -241,9 +248,10 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
-    browser = mo.ui.file_browser(initial_path=r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data',multiple=True)
-    # /Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data/CMSE X-ray SEF/Rigaku SmartLab/Olivia
+def _(data_path, mo):
+
+    browser = mo.ui.file_browser(initial_path=data_path,multiple=True)
+
     browser
     return (browser,)
 
@@ -441,6 +449,238 @@ def _(
         plotdf = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(
         columns=["x", "y", "series", "curve", "order","scanrate"])
     return (plotdf,)
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ---
+    ### Potential at target currents (grouped bar chart)
+    Enter target currents (mA) to compare the potential reached on the
+    **forward sweep** (earliest matching point, by Pt index) across
+    experiments.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    target_currents = mo.ui.text(value="0.5, 1, 1.5, 2",
+                                 label="Target currents (mA, comma-separated)",
+                                 full_width=True)
+    current_units = mo.ui.dropdown(options=["A", "mA", "µA"], value="A",
+                                   label="Native current units (as recorded)")
+    use_abs_current = mo.ui.switch(value=True, label="Match on |current| (ignore sign)")
+    mo.hstack([target_currents, current_units, use_abs_current])
+    return current_units, target_currents, use_abs_current
+
+
+@app.cell
+def _(current_units, mo, pd, plotdf, target_currents, use_abs_current):
+    mo.stop(plotdf.empty, mo.md("*Load data and select curves first.*"))
+
+    def _potential_at_current(df_grp, target):
+        """First crossing of `target`, scanning from the lowest Pt (sweep order),
+        i.e. the forward sweep rather than the return sweep."""
+        _sorted = df_grp.sort_values("order")
+        xs = _sorted["x"].tolist()
+        ys = _sorted["y"].tolist()
+        if use_abs_current.value:
+            ys = [abs(v) for v in ys]
+        for i in range(len(ys) - 1):
+            y0, y1 = ys[i], ys[i + 1]
+            if y0 == target:
+                return xs[i]
+            if (y0 < target) != (y1 < target):
+                frac = (target - y0) / (y1 - y0)
+                return xs[i] + frac * (xs[i + 1] - xs[i])
+        if ys and ys[-1] == target:
+            return xs[-1]
+        return float("nan")
+
+    _unit_to_mA = {"A": 1000.0, "mA": 1.0, "µA": 0.001}
+    _scale = _unit_to_mA[current_units.value]
+    try:
+        _targets_mA = [float(v) for v in target_currents.value.replace(",", " ").split()]
+    except ValueError:
+        _targets_mA = []
+
+    _rows = []
+    for _series, _grp in plotdf.groupby("series"):
+        for _t_mA in _targets_mA:
+            _target_native = _t_mA / _scale
+            _pot = _potential_at_current(_grp, _target_native)
+            _rows.append({"series": _series, "target_mA": _t_mA, "potential": _pot})
+
+    bar_df = pd.DataFrame(_rows, columns=["series", "target_mA", "potential"])
+    return (bar_df,)
+
+
+@app.cell
+def _(alt, bar_df, mo, x_axis):
+    mo.stop(bar_df.empty, mo.md("*No target currents to plot yet.*"))
+
+    bar_chart_spec = alt.Chart(bar_df).mark_bar().encode(
+        x=alt.X("target_mA:O", title="Target current (mA)"),
+        xOffset=alt.XOffset("series:N"),
+        y=alt.Y("potential:Q", title=x_axis.value, scale=alt.Scale(zero=False)),
+        color=alt.Color("series:N", title="Experiment"),
+        tooltip=["series:N", "target_mA:Q", "potential:Q"],
+    ).properties(width=600, height=400)
+
+    bar_chart = mo.ui.altair_chart(bar_chart_spec)
+    bar_chart
+    return (bar_chart,)
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ---
+    ### Optional: Electrochemically active surface area (ECSA) from CV
+    Estimates ECSA from the scan-rate dependence of the non-faradaic
+    double-layer charging current. Load CVs of the **same electrode** at
+    several scan rates, pick a potential window with no faradaic current,
+    and fit `ΔI/2 = Cdl · (scan rate)`. Given a specific capacitance `Cs`,
+    `ECSA = Cdl / Cs`.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    ecsa_enabled = mo.ui.switch(value=False, label="Enable ECSA extraction")
+    ecsa_enabled
+    return (ecsa_enabled,)
+
+
+@app.cell
+def _(ecsa_enabled, mo, parsed):
+    mo.stop(not ecsa_enabled.value,
+            mo.md("*Toggle on to extract ECSA from the loaded CVs.*"))
+
+    ecsa_files = mo.ui.multiselect(
+        options=list(parsed), value=list(parsed),
+        label="Files to include (same electrode, different scan rates)")
+    ecsa_potential = mo.ui.number(value=0.0, step=0.01,
+                                  label="Non-faradaic potential (V)")
+    ecsa_window = mo.ui.number(value=0.02, start=0.0, step=0.005,
+                               label="± window (V) to average current over")
+    ecsa_cs = mo.ui.number(value=40.0, start=1.0, step=1.0,
+                           label="Specific capacitance Cs (µF/cm²)")
+    mo.vstack([
+        ecsa_files,
+        mo.hstack([ecsa_potential, ecsa_window, ecsa_cs]),
+    ])
+    return ecsa_cs, ecsa_files, ecsa_potential, ecsa_window
+
+
+@app.cell
+def _(
+    curve_selectors,
+    current_units,
+    ecsa_files,
+    ecsa_potential,
+    ecsa_window,
+    np,
+    parsed,
+    pd,
+    x_axis,
+    y_axis,
+):
+    _unit_to_A = {"A": 1.0, "mA": 1e-3, "µA": 1e-6}
+    _scale_A = _unit_to_A[current_units.value]
+    _lo, _hi = ecsa_potential.value - ecsa_window.value, ecsa_potential.value + ecsa_window.value
+
+    _rows = []
+    for _name in ecsa_files.value:
+        _info = parsed.get(_name)
+        if _info is None:
+            continue
+        _curve = curve_selectors[_name].value
+        if _curve is None or _curve not in _info["tables"]:
+            continue
+        _df = _info["tables"][_curve]["data"]
+        if x_axis.value not in _df.columns or y_axis.value not in _df.columns:
+            continue
+
+        _sub = pd.DataFrame({
+            "x": _df[x_axis.value].astype(float),
+            "y": _df[y_axis.value].astype(float),
+        })
+        # Classify each point by sweep direction (sign of dV) so we can
+        # separate the forward- and return-sweep charging currents.
+        _dx = _sub["x"].diff()
+        _direction = np.sign(_dx.where(_dx != 0)).bfill().ffill()
+        _sub["direction"] = _direction
+
+        _near = _sub[(_sub["x"] >= _lo) & (_sub["x"] <= _hi)]
+        _i_pos = _near.loc[_near["direction"] > 0, "y"].mean()
+        _i_neg = _near.loc[_near["direction"] < 0, "y"].mean()
+        if pd.isna(_i_pos) or pd.isna(_i_neg):
+            continue
+
+        try:
+            _scanrate = float(_info["header"]["SCANRATE"][1])
+        except (KeyError, ValueError, IndexError):
+            continue
+
+        _cdl_current_A = abs(_i_pos - _i_neg) / 2.0 * _scale_A
+        _rows.append({
+            "series": _name,
+            "scanrate": _scanrate,
+            "cdl_current_A": _cdl_current_A,
+            "area_cm2": _info["area"],
+        })
+
+    ecsa_df = pd.DataFrame(
+        _rows, columns=["series", "scanrate", "cdl_current_A", "area_cm2"])
+    return (ecsa_df,)
+
+
+@app.cell
+def _(ecsa_cs, ecsa_df, mo, np):
+    mo.stop(ecsa_df["scanrate"].nunique() < 2,
+            mo.md("*Need at least two different scan rates (with current "
+                  "in the chosen potential window) to fit Cdl.*"))
+
+    _slope, _intercept = np.polyfit(ecsa_df["scanrate"], ecsa_df["cdl_current_A"], 1)
+    cdl_F = _slope
+    geometric_area_cm2 = ecsa_df["area_cm2"].mean()
+    ecsa_cm2 = cdl_F / (ecsa_cs.value * 1e-6)
+    roughness_factor = ecsa_cm2 / geometric_area_cm2 if geometric_area_cm2 else float("nan")
+
+    mo.md(f"""
+    **Cdl** = {cdl_F * 1e6:.3g} µF (slope of ΔI/2 vs. scan rate, intercept {_intercept * 1e6:.3g} µA)
+
+    **ECSA** = Cdl / Cs = {ecsa_cm2:.3g} cm²
+
+    **Roughness factor** = ECSA / geometric area ({geometric_area_cm2:.3g} cm²) = {roughness_factor:.3g}
+    """)
+    return cdl_F, ecsa_cm2, roughness_factor
+
+
+@app.cell
+def _(alt, cdl_F, ecsa_df, mo, np, pd):
+    _fit_x = np.linspace(0, ecsa_df["scanrate"].max() * 1.05, 50)
+    _fit_y_uA = (cdl_F * _fit_x) * 1e6
+    _fit_df = pd.DataFrame({"scanrate": _fit_x, "cdl_current_uA": _fit_y_uA})
+
+    _points_df = ecsa_df.assign(cdl_current_uA=ecsa_df["cdl_current_A"] * 1e6)
+
+    _chart_points = alt.Chart(_points_df).mark_point(filled=True, size=80).encode(
+        x=alt.X("scanrate:Q", title="Scan rate (V/s)"),
+        y=alt.Y("cdl_current_uA:Q", title="ΔI/2 (µA)"),
+        color=alt.Color("series:N", title="File"),
+        tooltip=["series:N", "scanrate:Q", "cdl_current_uA:Q"],
+    )
+    _chart_fit = alt.Chart(_fit_df).mark_line(strokeDash=[4, 4], color="gray").encode(
+        x="scanrate:Q", y="cdl_current_uA:Q",
+    )
+
+    ecsa_chart = mo.ui.altair_chart((_chart_points + _chart_fit).properties(width=600, height=400))
+    ecsa_chart
+    return (ecsa_chart,)
 
 
 @app.cell

@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.23.15"
+__generated_with = "0.25.0"
 app = marimo.App(width="medium")
 
 
@@ -111,7 +111,7 @@ def _(np, pd):
 
 @app.cell
 def _(mo):
-    browser = mo.ui.file_browser(multiple=True)
+    browser = mo.ui.file_browser(initial_path = r"\Users\oschn\MIT Dropbox\Olivia Schneble",multiple=True)
     browser
     return (browser,)
 
@@ -212,22 +212,14 @@ def _(mo):
             offset,
         ]
     )
-    return (
-        interactive,
-        invert,
-        normalize,
-        offset,
-        rate_override,
-        signal,
-        time_unit,
-    )
+    return invert, normalize, offset, rate_override, signal, time_unit
 
 
 @app.cell
 def _(
-    interactive,
+    group_assign_df,
+    group_form,
     invert,
-    mo,
     normalize,
     np,
     offset,
@@ -253,6 +245,8 @@ def _(
 
     for _k, (_name, _df) in enumerate(traces.items()):
         _rate = rate_override.value or _df.attrs.get("rate_hz")
+        _scan_name = str(_name)[-10:-4]
+        _scan_number = int(str(_name)[-6:-4])
         if _rate:
             _t = np.arange(len(_df)) / _rate
             if time_unit.value == "min":
@@ -266,7 +260,14 @@ def _(
             _m = np.nanmax(np.abs(_y))
             if _m:
                 _y = _y / _m
-        _ax.plot(_t, _y + _k * _step, lw=1, label=_name)
+
+        if group_form.value is None:
+            _ax.plot(_t, _y + _k * _step, lw=2, color='tab:blue', alpha=_scan_number/37 ,label=_scan_name)
+        else:
+            import matplotlib as mpl
+            colors = mpl.color_sequences['tab20']
+            _group = int(group_assign_df[group_assign_df['file']==_name]['group'].str.extract(r"G(\d)",expand=False).item())
+            _ax.plot(_t,_y+_k*_step, lw=2, c=colors[_group-1],label=f'Sample {_group}')
 
     _ax.set_xlabel(f"Time ({time_unit.value})" if _all_timed else "Time / sample index (rate unknown for some files)")
     _ax.set_ylabel(
@@ -281,12 +282,8 @@ def _(
             _ax.legend(fontsize="x-small", bbox_to_anchor=(1.02, 1), loc="upper left")
     _fig.tight_layout()
 
-    mo.mpl.interactive(_fig) if interactive.value else _fig
-    return
-
-
-@app.cell
-def _():
+    # mo.mpl.interactive(_fig) if interactive.value else _fig
+    _fig
     return
 
 
@@ -475,28 +472,6 @@ def _(
             _rows.append(_row)
     peak_results_df = pd.DataFrame(_rows, columns=_cols)
     return peak_fits, peak_results_df
-
-
-@app.cell
-def _():
-    # _scale = 60.0 if time_unit.value == "min" else 1.0
-    # _ends = []
-    # for _df in traces.values():
-    #     _t, _y = gc_signal(_df)
-    #     _ends.append(_t[-1] / _scale if _t is not None else len(_y) - 1)
-    # _tmax = float(max(_ends, default=1.0)) or 1.0
-    # _names = list(traces)
-
-    # preview_file = mo.ui.dropdown(
-    #     options=_names, value=_names[0] if _names else None, label="Preview file"
-    # )
-    # preview_range = mo.ui.range_slider(
-    #     start=0, stop=_tmax, step=_tmax / 2000, value=[0, _tmax],
-    #     label=f"Zoom ({time_unit.value})", show_value=True, full_width=True,
-    # )
-    # overlay_all = mo.ui.checkbox(label="Overlay other selected files (grey)")
-    # mo.vstack([mo.hstack([preview_file, overlay_all], justify="start"), preview_range])
-    return
 
 
 @app.cell
@@ -761,7 +736,6 @@ def _(mo, traces):
     ).form(submit_button_label="Apply groups", clear_on_submit=False)
 
     mo.vstack([mo.md("## Replicate groups"), group_order_by, group_form])
-
     return default_group_spec, group_form, group_order_by
 
 
@@ -836,6 +810,12 @@ def _(default_group_spec, group_form, group_order_by, mo, np, pd, traces):
     _items.append(mo.ui.table(group_assign_df, selection=None, page_size=25))
     mo.vstack(_items)
     return group_assign_df, group_order
+
+
+@app.cell
+def _(group_assign_df):
+    group_assign_df
+    return
 
 
 @app.cell
