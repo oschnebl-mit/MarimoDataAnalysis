@@ -741,14 +741,14 @@ def _(h2ssubdf, np, parse_multi_EIS_alt):
     synthesis['Kappa'] = synthesis['CellConst']/synthesis['Rsoln']
     synthesis['Solvent'] = np.where(synthesis['Measurement'].str.contains(r"(sulf)"), 'IL+Sulfolane', np.where(synthesis['Measurement'].str.contains(r"(S3MS)"),'IL+Sulfolane', np.where(synthesis['Measurement'].str.contains(r"Pyr"),'IL+Pyridine',np.where(synthesis['Measurement'].str.contains(r"(PC)"),'IL+PC','IL only'))))
     # synthesis
-    return
+    return (synthesis,)
 
 
 @app.cell
-def _(pd):
-    syn1 = pd.read_csv(r'/Users/ods/MIT Dropbox/Olivia Schneble/10-19 Admin and Logistics/11 Publishing and Reporting/11.06 H2S Electrolyte Paper/bmim_EIS_synthesis_df2.csv')
+def _(synthesis):
+    # syn1 = pd.read_csv(r'/Users/ods/MIT Dropbox/Olivia Schneble/10-19 Admin and Logistics/11 Publishing and Reporting/11.06 H2S Electrolyte Paper/bmim_EIS_synthesis_df2.csv')
     # syn2 = syn1.iloc[np.where(syn1['Temperature']==190)]
-    syn2=syn1
+    syn2=synthesis
     return (syn2,)
 
 
