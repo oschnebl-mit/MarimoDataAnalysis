@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.23.15"
+__generated_with = "0.25.0"
 app = marimo.App(width="medium")
 
 
@@ -11,8 +11,9 @@ def _():
     import io
     import pandas as pd
     import altair as alt
+    from pathlib import Path
 
-    return alt, mo, os, pd
+    return Path, alt, mo, os, pd
 
 
 @app.cell
@@ -105,25 +106,95 @@ def _(mo):
     file_upload = mo.ui.file(
         filetypes=[".dta", ".DTA", ".txt"],
         label="Upload Gamry .dta file",
+        multiple=True
     )
     file_upload
     return (file_upload,)
 
 
 @app.cell
-def _(file_upload, mo, parse_gamry_dta):
-    mo.stop(not file_upload.value, mo.md("⬆️ **Upload a `.dta` file to begin.**"))
+def _(Path, file_upload, mo, parse_gamry_dta, pd):
 
-    _raw = file_upload.value[0].contents
-    text = _raw.decode("latin-1") if isinstance(_raw, bytes) else _raw
-    header, tables = parse_gamry_dta(text)
+    mo.stop(not file_upload.value, mo.md("⬆️ **Upload one or more `.dta` files to begin.**"))
 
-    technique = header.get("TAG", ["?"])[0]
-    mo.md(
-        f"**Technique (TAG):** `{technique}`  \n"
-        f"**Tables found:** {', '.join(tables) or 'none'}"
-    )
+    def _split_table(obj):
+        """Return (DataFrame, wrapper_dict_or_None, key_of_df_in_wrapper_or_None)."""
+        if isinstance(obj, pd.DataFrame):
+            return obj, None, None
+        if isinstance(obj, dict):
+            for _k, _v in obj.items():          # wrapper dict holding a DataFrame
+                if isinstance(_v, pd.DataFrame):
+                    return _v, obj, _k
+            return pd.DataFrame(obj), None, None  # dict of column -> values
+        raise TypeError(f"Unrecognized table type: {type(obj)}")
+
+    headers = {}       # Measurement name -> header dict
+    _per_table = {}    # table name -> list of DataFrames
+    _wrappers = {}     # table name -> (first wrapper dict, df key), if tables are wrapped
+    _summary = []
+
+    for _f in file_upload.value:
+        _name = Path(_f.name).stem
+        _base, _i = _name, 2
+        while _name in headers:
+            _name = f"{_base} ({_i})"
+            _i += 1
+
+        _raw = _f.contents
+        _text = _raw.decode("latin-1") if isinstance(_raw, bytes) else _raw
+        _hdr, _tbls = parse_gamry_dta(_text)
+        headers[_name] = _hdr
+
+        for _tname, _obj in _tbls.items():
+            _df, _wrap, _key = _split_table(_obj)
+            _df = _df.copy()
+            _df.insert(0, "Measurement name", _name)
+            _per_table.setdefault(_tname, []).append(_df)
+            if _wrap is not None:
+                _wrappers.setdefault(_tname, (_wrap, _key))
+
+        _summary.append(
+            f"| {_name} | `{_hdr.get('TAG', ['?'])[0]}` | {', '.join(_tbls) or 'none'} |"
+        )
+
+    tables = {}
+    for _tname, _dfs in _per_table.items():
+        _merged = pd.concat(_dfs, ignore_index=True)
+        if _tname in _wrappers:                      # keep the original structure
+            _wrap, _key = _wrappers[_tname]
+            tables[_tname] = {**_wrap, _key: _merged}
+        else:
+            tables[_tname] = _merged
+
+    header = next(iter(headers.values()))
+    _techniques = {_h.get("TAG", ["?"])[0] for _h in headers.values()}
+
+    mo.vstack([
+        mo.md(
+            f"**Files loaded:** {len(headers)}\n\n"
+            "| Measurement name | Technique (TAG) | Tables |\n|---|---|---|\n"
+            + "\n".join(_summary)
+        ),
+        mo.callout(mo.md(f"⚠️ Mixed techniques: {', '.join(sorted(_techniques))}"), kind="warn")
+        if len(_techniques) > 1 else mo.md(""),
+    ])
     return (tables,)
+
+
+@app.cell
+def _():
+    # mo.stop(not file_upload.value, mo.md("⬆️ **Upload a `.dta` file to begin.**"))
+
+    # _raw = file_upload.value[0].contents
+    # text = _raw.decode("latin-1") if isinstance(_raw, bytes) else _raw
+    # header, tables = parse_gamry_dta(text)
+
+    # technique = header.get("TAG", ["?"])[0]
+    # mo.md(
+    #     f"**Technique (TAG):** `{technique}`  \n"
+    #     f"**Tables found:** {', '.join(tables) or 'none'}"
+    # )
+    return
 
 
 @app.cell
@@ -208,6 +279,7 @@ def _():
 
 @app.cell
 def _(alt, df, mo, units, x_axis, y_left, y_right):
+    import json
     def _lbl(col):
         u = units.get(col, "")
         return f"{col} ({u})" if u else col
@@ -223,18 +295,26 @@ def _(alt, df, mo, units, x_axis, y_left, y_right):
                 scale=alt.Scale(zero=False, nice=False))
     )
 
-    line_left = base.mark_line(color="#1f77b4").encode(
-        y=alt.Y(f"{lcol}:Q", title=_lbl(lcol),
+    line_left = base.mark_line().transform_calculate(
+        abs_left=f"abs(datum[{json.dumps(lcol)}])"
+    ).encode(
+        y=alt.Y("abs_left:Q", title=f"|{_lbl(lcol)}|",
                 axis=alt.Axis(titleColor="#1f77b4"),
                 scale=alt.Scale(zero=False)),
-        tooltip=[alt.Tooltip(f"{xcol}:Q"), alt.Tooltip(f"{lcol}:Q")],
+        color = "Measurement name",
+        tooltip=[alt.Tooltip(f"{xcol}:Q"),
+                 alt.Tooltip("abs_left:Q", title=f"|{lcol}|")],
     )
 
-    line_right = base.mark_line(color="#d62728").encode(
-        y=alt.Y(f"{rcol}:Q", title=_lbl(rcol),
+    line_right = base.mark_line(color="#d62728").transform_calculate(
+        abs_right=f"abs(datum[{json.dumps(rcol)}])"
+    ).encode(
+        y=alt.Y("abs_right:Q", title=f"|{_lbl(rcol)}|",
                 axis=alt.Axis(titleColor="#d62728"),
                 scale=alt.Scale(zero=False)),
-        tooltip=[alt.Tooltip(f"{xcol}:Q"), alt.Tooltip(f"{rcol}:Q")],
+        detail = "Measurement name",
+        tooltip=[alt.Tooltip(f"{xcol}:Q"),
+                 alt.Tooltip("abs_right:Q", title=f"|{rcol}|")],
     )
 
     chart = (

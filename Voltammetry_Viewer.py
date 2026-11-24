@@ -28,8 +28,8 @@ def _(mo):
 
 @app.cell
 def _():
-    # data_path = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data'
-    data_path = r'\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data'
+    data_path = r'/Users/ods/MIT Dropbox/Olivia Schneble/jaramillogroupshared/Data'
+    # data_path = r'\Users\oschn\Dropbox (MIT)\jaramillogroupshared\Data'
     return (data_path,)
 
 
@@ -530,7 +530,7 @@ def _(alt, bar_df, mo, x_axis):
 
     bar_chart = mo.ui.altair_chart(bar_chart_spec)
     bar_chart
-    return (bar_chart,)
+    return
 
 
 @app.cell
@@ -577,8 +577,8 @@ def _(ecsa_enabled, mo, parsed):
 
 @app.cell
 def _(
-    curve_selectors,
     current_units,
+    curve_selectors,
     ecsa_files,
     ecsa_potential,
     ecsa_window,
@@ -657,7 +657,7 @@ def _(ecsa_cs, ecsa_df, mo, np):
 
     **Roughness factor** = ECSA / geometric area ({geometric_area_cm2:.3g} cm²) = {roughness_factor:.3g}
     """)
-    return cdl_F, ecsa_cm2, roughness_factor
+    return (cdl_F,)
 
 
 @app.cell
@@ -680,7 +680,7 @@ def _(alt, cdl_F, ecsa_df, mo, np, pd):
 
     ecsa_chart = mo.ui.altair_chart((_chart_points + _chart_fit).properties(width=600, height=400))
     ecsa_chart
-    return (ecsa_chart,)
+    return
 
 
 @app.cell
